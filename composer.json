@@ -1,0 +1,36 @@
+{
+    "name": "sanmai/LazyLINQ",
+    "description": ".NET LINQ-like library with mandatory lazy evaluation",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Alexey Kopytko",
+            "email": "alexey@kopytko.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^6.5",
+        "satooshi/php-coveralls": "^1.0",
+        "friendsofphp/php-cs-fixer": "^2.4",
+        "codacy/coverage": "^1.4",
+        "phan/phan": "^0.12.1"
+    },
+    "license": "Apache-2.0",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {"LazyLINQ\\": "src/LazyLINQ/"}
+    },
+    "autoload-dev": {
+        "psr-4": {"LazyLINQ\\": "tests/LazyLINQ/"}
+    },
+    "require": {
+        "php": ">=7",
+        "sanmai/pipeline": "^0.7"
+    },
+    "scripts": {
+        "test": "php vendor/bin/phpunit --no-coverage",
+        "analyze": "PHAN_DISABLE_XDEBUG_WARN=1 php vendor/bin/phan --color --progress-bar && echo",
+        "fix": "php vendor/bin/php-cs-fixer fix"
+    }
+}
