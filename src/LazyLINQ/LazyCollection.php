@@ -29,7 +29,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      *
      * @param array|\Traversable|mixed $source
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return static
      */
     public static function from($source)
     {
@@ -109,7 +109,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      *
      * @param mixed $element the value to append
      *
-     * @return \LazyLINQ\LazyCollection new instance
+     * @return static new instance
      */
     public function append($element)
     {
@@ -152,7 +152,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      *
      * @see settype()
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return $this
      */
     public function cast($type)
     {
@@ -168,7 +168,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      *
      * @param \Traversable|array $second the sequence to concatenate
      *
-     * @return \LazyLINQ\LazyCollection new instance
+     * @return static new instance
      */
     public function concat($second)
     {
@@ -245,7 +245,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      *
      * @param ?callable $comparer An optional equality comparer to compare values. Should return true if values are equal.
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return $this
      */
     public function distinct(callable $comparer = null)
     {
@@ -262,7 +262,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
     /**
      * Returns an empty collection.
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return static
      */
     public static function empty()
     {
@@ -275,7 +275,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      * @param \Traversable|array $collection a reversible collection of values to exclude from
      * @param ?callable          $comparer
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return static new instance
      */
     public function except($collection, callable $comparer = null)
     {
@@ -420,7 +420,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      *
      * @see gettype()
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return $this
      */
     public function ofType($type)
     {
@@ -436,7 +436,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      *
      * @see get_class()
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return $this
      */
     public function ofClass($className)
     {
@@ -450,7 +450,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      *
      * @param mixed $element the value to prepend
      *
-     * @return \LazyLINQ\LazyCollection new instance
+     * @return static new instance
      */
     public function prepend($element)
     {
@@ -469,7 +469,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      * @param int $start the value of the first integer in the sequence
      * @param int $count the number of sequential integers to generate
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return static
      */
     public static function range(int $start, int $count)
     {
@@ -485,7 +485,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      * @param mixed $element the value to be repeated
      * @param int   $count   the number of times to repeat the value in the generated sequence
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return static
      */
     public static function repeat($element, int $count)
     {
@@ -501,7 +501,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      *
      * @param callable $selector a transform function to apply to each element
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return $this
      */
     public function select(callable $selector)
     {
@@ -513,7 +513,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      *
      * @param ?callable $selector a transform function to apply to each element
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return $this
      */
     public function selectMany(callable $selector = null)
     {
@@ -570,7 +570,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      *
      * @param int $count the number of elements to skip before returning with the remaining elements
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return $this
      */
     public function skip(int $count)
     {
@@ -587,7 +587,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      *
      * @param callable $predicate a function to test each element for a condition
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return $this
      */
     public function skipWhile(callable $predicate)
     {
@@ -627,7 +627,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      *
      * @param int $count the number of elements to return
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return $this
      */
     public function take(int $count)
     {
@@ -649,7 +649,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      *
      * @param callable $predicate
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return static new instance
      */
     public function takeWhile(callable $predicate)
     {
@@ -679,7 +679,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      *
      * @param callable $predicate a function to test each element for a condition
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return $this
      */
     public function where(callable $predicate)
     {
@@ -693,7 +693,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      * @param ?callable          $resultSelector a function that specifies how to merge the elements from the two sequences
      * @param mixed              $collection
      *
-     * @return \LazyLINQ\LazyCollection new instance
+     * @return static new instance
      */
     public function zip($collection, callable $resultSelector = null)
     {
