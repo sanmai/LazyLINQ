@@ -323,6 +323,8 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         ], LC::from([1, 2, 3])->zip(['one', 'two', 'three'], function ($digit, $label) {
             return "$digit is $label";
         })->toArray());
+
+        $this->assertSame(3, LC::from([1])->zip(LC::from([2]))->selectMany()->sum());
     }
 
     public function testJSON()

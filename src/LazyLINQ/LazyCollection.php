@@ -698,7 +698,12 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
     public function zip($collection, callable $resultSelector = null)
     {
         // Collection must be non-rewindable. A generator can't be used here.
-        $collection = new \NoRewindIterator(static::from($collection)->getIterator());
+        // \NoRewindIterator needs \Iterator, not \IteratorAggregate
+        $collection = new \NoRewindIterator(
+            $collection instanceof \IteratorAggregate
+            ? $collection->getIterator()
+            : static::from($collection)->getIterator()
+        );
 
         $result = static::from(function () use ($collection) {
             foreach ($this as $firstKey => $firstValue) {
