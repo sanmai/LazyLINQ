@@ -234,6 +234,12 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame([1, 1, 2, 2, 3, 3], LC::range(1, 3)->selectMany(function ($value) {
             return LC::repeat($value, 2);
         })->toArray());
+
+        $this->assertSame([1, 2, 3, 4, 5, 6], LC::from([
+            [1, 2],
+            [3, 4],
+            [5, 6],
+        ])->selectMany()->toArray());
     }
 
     public function testSingle()

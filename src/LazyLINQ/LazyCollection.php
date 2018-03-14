@@ -511,16 +511,27 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
     /**
      * Projects each element of a sequence to another sequence and flattens the resulting sequences into one sequence.
      *
-     * @param callable $selector a transform function to apply to each element
+     * @param ?callable $selector a transform function to apply to each element
      *
      * @return \LazyLINQ\LazyCollection
      */
-    public function selectMany(callable $selector)
+    public function selectMany(callable $selector = null)
     {
+        if (!$selector) {
+            return $this->selectAll();
+        }
+
         return $this->map(function ($value) use ($selector) {
             foreach ($selector($value) as $value) {
                 yield $value;
             }
+        });
+    }
+
+    private function selectAll()
+    {
+        return $this->map(function ($value) {
+            yield from $value;
         });
     }
 
