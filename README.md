@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/sanmai/LazyLINQ.svg?branch=master)](https://travis-ci.org/sanmai/LazyLINQ)
-<!-- [![Coverage Status](https://coveralls.io/repos/github/sanmai/LazyLINQ/badge.svg?branch=master)](https://coveralls.io/github/sanmai/LazyLINQ?branch=master) -->
+[![Coverage Status](https://coveralls.io/repos/github/sanmai/LazyLINQ/badge.svg?branch=master)](https://coveralls.io/github/sanmai/LazyLINQ?branch=master)
 <!-- [![Codacy Badge](https://api.codacy.com/project/badge/Grade/7484f26ddbfd42ebb6f0eac92e68d04d)](https://www.codacy.com/app/sanmai/LazyLINQ?utm_source=github.com&utm_medium=referral&utm_content=sanmai/LazyLINQ&utm_campaign=badger) -->
 <!-- [![Maintainability](https://api.codeclimate.com/v1/badges/a1291887920116526e2a/maintainability)](https://codeclimate.com/github/sanmai/LazyLINQ/maintainability)  -->
 <!-- [![Latest Stable Version](https://poser.pugx.org/sanmai/LazyLINQ/v/stable)](https://packagist.org/packages/sanmai/LazyLINQ) -->
