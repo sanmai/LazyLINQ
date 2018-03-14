@@ -280,33 +280,43 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
     public function except($collection, callable $comparer = null)
     {
         if (!$comparer && is_array($collection)) {
-            return static::from(function () use ($collection) {
-                foreach ($this as $value) {
-                    if (!in_array($value, $collection)) {
-                        yield $value;
-                    }
-                }
-            })->distinct();
+            return $this->exceptArray($collection);
         }
 
         if (!$comparer) {
-            return static::from(function () use ($collection) {
-                foreach ($this as $value) {
-                    foreach ($collection as $excluded) {
-                        if ($value == $excluded) {
-                            continue 2;
-                        }
-                    }
-
-                    yield $value;
-                }
-            })->distinct();
+            return $this->exceptEquals($collection);
         }
 
         return static::from(function () use ($collection, $comparer) {
             foreach ($this as $value) {
                 foreach ($collection as $excluded) {
                     if ($comparer($value, $excluded)) {
+                        continue 2;
+                    }
+                }
+
+                yield $value;
+            }
+        })->distinct();
+    }
+
+    private function exceptArray(array $collection)
+    {
+        return static::from(function () use ($collection) {
+            foreach ($this as $value) {
+                if (!in_array($value, $collection)) {
+                    yield $value;
+                }
+            }
+        })->distinct();
+    }
+
+    private function exceptEquals($collection)
+    {
+        return static::from(function () use ($collection) {
+            foreach ($this as $value) {
+                foreach ($collection as $excluded) {
+                    if ($value == $excluded) {
                         continue 2;
                     }
                 }
