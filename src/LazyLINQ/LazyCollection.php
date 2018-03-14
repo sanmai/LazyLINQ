@@ -194,18 +194,23 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
     public function contains($value, callable $comparer = null)
     {
         if (!$comparer) {
-            // We could refactor this with a `map()` call, but that's an extra function call for each iteration.
-            foreach ($this as $sample) {
-                if ($sample == $value) {
-                    return true;
-                }
-            }
-
-            return false;
+            return $this->containsAny($value);
         }
 
         foreach ($this as $sample) {
             if ($comparer($sample, $value)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function containsAny($value)
+    {
+        // We could refactor this with a `map()` call, but that's an extra function call for each iteration.
+        foreach ($this as $sample) {
+            if ($sample == $value) {
                 return true;
             }
         }
