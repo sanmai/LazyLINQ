@@ -1,5 +1,5 @@
 {
-    "name": "sanmai/LazyLINQ",
+    "name": "sanmai/lazy-linq",
     "description": ".NET LINQ-like library with mandatory lazy evaluation",
     "type": "library",
     "authors": [
