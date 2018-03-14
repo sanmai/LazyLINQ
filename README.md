@@ -50,7 +50,7 @@ Powered by generators, this library works in a lazy way: instead of doing comput
 | :heavy_check_mark:  | Prepend()             | Returns a new collection. |
 | :heavy_check_mark:  | Range()               | Semantically different from standard `range()` function. |
 | :heavy_check_mark:  | Repeat()              |                               |
-| :heavy_check_mark:  | Reverse()             | Needs all data at once. | 
+|                     | Reverse()             | Needs all data at once. | 
 | :heavy_check_mark:  | Select()              |                               |
 | :heavy_check_mark:  | SelectMany()          |                               |
 |                     | SequenceEqual()       |                               |
