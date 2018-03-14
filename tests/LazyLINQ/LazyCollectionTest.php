@@ -63,6 +63,10 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertTrue(LC::from([2, 3, 4, 5])->all('is_numeric'));
         $this->assertFalse(LC::from([2, 'foo', 3, 4, 5])->all('is_numeric'));
+
+        $this->assertTrue(LC::from([2, 3, 4, 5])->all());
+        $this->assertFalse(LC::from([2, 3, 4, false])->all());
+        $this->assertFalse(LC::from([2, 3, 4, []])->all());
     }
 
     /**

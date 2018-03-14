@@ -67,16 +67,31 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
     }
 
     /**
-     * Determines whether all elements of a sequence satisfy a condition.
+     * Determines whether all elements of a sequence satisfy a condition. With no predicate checks if all elements in sequence are truthy.
      *
-     * @param callable $predicate a function to test each element for a condition
+     * @param ?callable $predicate a function to test each element for a condition
      *
      * @return bool
      */
-    public function all(callable $predicate)
+    public function all(callable $predicate = null)
     {
+        if (!$predicate) {
+            return $this->allTrue();
+        }
+
         foreach ($this as $value) {
             if (!$predicate($value)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function allTrue()
+    {
+        foreach ($this as $value) {
+            if (!$value) {
                 return false;
             }
         }
