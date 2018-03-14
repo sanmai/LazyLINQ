@@ -63,8 +63,12 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertFalse(LC::from([])->any());
         $this->assertTrue(LC::from([false])->any());
-        $this->assertFalse(LC::from(['foo', 'bar'])->any('is_int'));
-        $this->assertTrue(LC::from(['foo', 1, 'bar'])->any('is_int'));
+        $this->assertFalse(LC::from(['foo', 'bar'])->any(function ($value) {
+            return is_int($value);
+        }));
+        $this->assertTrue(LC::from(['foo', 1, 'bar'])->any(function ($value) {
+            return is_int($value);
+        }));
     }
 
     public function testAppend()

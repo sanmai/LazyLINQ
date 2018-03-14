@@ -93,16 +93,12 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      */
     public function any(callable $predicate = null)
     {
-        if (!$predicate) {
-            foreach ($this as $value) {
-                return true;
-            }
+        if ($predicate) {
+            $this->filter($predicate);
         }
 
         foreach ($this as $value) {
-            if ($predicate($value)) {
-                return true;
-            }
+            return true;
         }
 
         return false;
