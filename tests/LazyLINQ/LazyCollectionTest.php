@@ -42,6 +42,9 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame([null], LC::from(null)->toArray());
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::aggregate
+     */
     public function testAggregate()
     {
         $this->assertEquals('baz bar foo ', LC::from(explode(' ', 'foo bar baz'))->aggregate('', function ($carry, $next) {
@@ -53,12 +56,18 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         }, 'trim'));
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::all
+     */
     public function testAll()
     {
         $this->assertTrue(LC::from([2, 3, 4, 5])->all('is_numeric'));
         $this->assertFalse(LC::from([2, 'foo', 3, 4, 5])->all('is_numeric'));
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::any
+     */
     public function testAny()
     {
         $this->assertFalse(LC::from([])->any());
@@ -69,28 +78,43 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(LC::from(['foo', 1, 'bar'])->any('is_int'));
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::append
+     */
     public function testAppend()
     {
         $this->assertSame(['foo', 'bar', 'baz'], LC::from(['foo', 'bar'])->append('baz')->toArray());
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::average
+     */
     public function testAverage()
     {
         $this->assertSame(8, LC::from([4, 4, 8, 16])->average());
         $this->assertSame(3, LC::from(['foo', 'bar', 'baz'])->average('strlen'));
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::cast
+     */
     public function testCast()
     {
         $this->assertSame([0.0, -1300.0, 100.0, 200.0], LC::from([false, '-1.3e3', '100', '200'])->cast('float')->toArray());
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::concat
+     */
     public function testConcat()
     {
         $this->assertSame([1, 2, 3, 4], LC::from([1, 2])->concat([3, 4])->toArray());
         $this->assertSame([1, 2, 3, 4], LC::from([1, 2])->concat(LC::from([3, 4]))->toArray());
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::contains
+     */
     public function testContains()
     {
         $this->assertTrue(LC::from([1, 2, 4])->contains(2));
@@ -105,12 +129,18 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         }));
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::count
+     */
     public function testCount()
     {
         $this->assertSame(6, LC::from([1, 2, 3, 4, 'foo', 'bar'])->count());
         $this->assertSame(2, LC::from([1, 2, 3, 4, 'foo', 'bar'])->count('is_string'));
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::distinct
+     */
     public function testDistinct()
     {
         $this->assertSame([1, 2, 3, 4], LC::from([1, 1, 2, 2, 3, 4, 4])->distinct()->toArray());
@@ -121,6 +151,9 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         })->toArray());
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::empty
+     */
     public function testEmpty()
     {
         foreach (LC::empty() as $value) {
@@ -130,6 +163,9 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame([], LC::empty()->toArray());
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::except
+     */
     public function testExcept()
     {
         $this->assertEquals([2.0, 2.1, 2.3, 2.4, 2.5], LC::from([2.0, 2.0, 2.1, 2.2, 2.3, 2.3, 2.4, 2.5])->except([2.2])->toArray());
@@ -146,6 +182,9 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         })->toArray());
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::first
+     */
     public function testFirst()
     {
         $this->assertSame(1, LC::from([1, 2, 3])->first());
@@ -156,6 +195,9 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertNull(LC::empty()->first());
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::last
+     */
     public function testLast()
     {
         $this->assertSame(3, LC::from([1, 2, 3])->last());
@@ -164,12 +206,18 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         }));
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::max
+     */
     public function testMax()
     {
         $this->assertSame(4, LC::from([1, 2, 4, 3])->max());
         $this->assertSame(4, LC::from(['foo', 'bar', 'test', 'baz'])->max('strlen'));
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::min
+     */
     public function testMin()
     {
         $this->assertSame(-2, LC::from([1, -2, 4, 3])->min());
@@ -177,6 +225,9 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(2, LC::from(['foo', 'bar', 'gg', 'test', 'baz'])->min('strlen'));
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::ofType
+     */
     public function testOfType()
     {
         $this->assertSame([1.2, 4.0], LC::from([1.2, 2, 3, 4.0, 'foo', 'bar'])->ofType('double')->toArray());
@@ -186,17 +237,26 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($object, LC::from([1, $object, 'foo'])->ofType('object')->first());
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::ofClass
+     */
     public function testOfClass()
     {
         $object = new \stdClass();
         $this->assertSame($this, LC::from([$object, $this])->ofClass(get_class($this))->first());
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::prepend
+     */
     public function testPrepend()
     {
         $this->assertSame(['baz', 'foo', 'bar'], LC::from(['foo', 'bar'])->prepend('baz')->toArray());
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::range
+     */
     public function testRange()
     {
         $this->assertEquals([
@@ -211,17 +271,23 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
             81,
             100,
         ], LC::range(1, 10)->select(function ($value) {
-            return pow($value, 2);
+            return $value ** 2;
         })->toArray());
 
         $this->assertEquals([-1, 0, 1, 2], LC::range(-1, 4)->toArray());
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::repeat
+     */
     public function testRepeat()
     {
         $this->assertEquals([true, true, true, true], LC::repeat(true, 4)->toArray());
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::select
+     */
     public function testSelect()
     {
         $this->assertSame([2, 3, 4], LC::range(1, 3)->select(function ($value) {
@@ -229,6 +295,9 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         })->toArray());
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::selectMany
+     */
     public function testSelectMany()
     {
         $this->assertSame([1, 1, 2, 2, 3, 3], LC::range(1, 3)->selectMany(function ($value) {
@@ -242,6 +311,9 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         ])->selectMany()->toArray());
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::single
+     */
     public function testSingle()
     {
         $this->assertSame(1, LC::from([1])->single());
@@ -250,6 +322,9 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         }));
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::single
+     */
     public function testSingleFailsNoPredicate()
     {
         $this->expectException(InvalidOperationException::class);
@@ -257,6 +332,9 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         LC::from([1, 2])->single();
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::single
+     */
     public function testSingleFailsWithPredicate()
     {
         $this->expectException(InvalidOperationException::class);
@@ -266,6 +344,9 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         });
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::skip
+     */
     public function testSkip()
     {
         $this->assertSame([1, 2, 3], LC::range(1, 3)->skip(0)->toArray());
@@ -274,17 +355,26 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame([], LC::range(1, 3)->skip(10)->toArray());
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::skipWhile
+     */
     public function testSkipWhile()
     {
         $this->assertSame(['foo', 'bar'], LC::from([1, 2, 'foo', 'bar'])->skipWhile('is_int')->toArray());
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::sum
+     */
     public function testSum()
     {
         $this->assertSame(28, LC::from([4, 8, 16])->sum());
         $this->assertSame(9, LC::from(['foo', 'bar', 'baz'])->sum('strlen'));
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::take
+     */
     public function testTake()
     {
         $this->assertSame([], LC::range(1, 3)->take(0)->toArray());
@@ -292,11 +382,17 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame([1, 2], LC::range(1, 3)->take(2)->toArray());
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::takeWhile
+     */
     public function testTakeWhile()
     {
         $this->assertSame([1, 2], LC::from([1, 2, 'foo', 'bar'])->takeWhile('is_int')->toArray());
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::where
+     */
     public function testWhere()
     {
         $this->assertSame(['foo', 'bar'], LC::from([1, 2, 'foo', 'bar', 3, 'a'])->where(function ($value) {
@@ -304,6 +400,9 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         })->toArray());
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::zip
+     */
     public function testZip()
     {
         $this->assertSame([
@@ -327,6 +426,9 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(3, LC::from([1])->zip(LC::from([2]))->selectMany()->sum());
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::jsonSerialize
+     */
     public function testJSON()
     {
         $this->assertSame('[1,2,3]', json_encode(LC::from([1, 2, 3])));
