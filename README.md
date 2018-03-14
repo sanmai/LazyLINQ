@@ -11,7 +11,7 @@ Powered by generators, this library works in a lazy way: instead of doing comput
 
 # Install
 
-    composer require sanmai/LazyLINQ
+    composer require sanmai/lazy-linq
 
 # API Compatibility
 
