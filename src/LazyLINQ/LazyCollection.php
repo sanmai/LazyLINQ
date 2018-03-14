@@ -589,7 +589,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      */
     public function skip(int $count)
     {
-        return $this->filter(static function ($value) use ($count) {
+        return $this->filter(static function () use ($count) {
             static $skipped = 0;
             $skipped += 1;
 
@@ -721,8 +721,8 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
         );
 
         $result = static::from(function () use ($collection) {
-            foreach ($this as $firstKey => $firstValue) {
-                foreach ($collection as $secondKey => $secondValue) {
+            foreach ($this as $firstValue) {
+                foreach ($collection as $secondValue) {
                     yield [
                         $firstValue,
                         $secondValue,
