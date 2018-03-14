@@ -150,7 +150,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
             $this->map($selector);
         }
 
-        $result = $this->reduce(function ($carry, $value) use ($selector) {
+        $result = $this->reduce(static function ($carry, $value) use ($selector) {
             $carry->sum += $value;
             $carry->count += 1;
 
@@ -171,7 +171,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      */
     public function cast($type)
     {
-        return $this->map(function ($value) use ($type) {
+        return $this->map(static function ($value) use ($type) {
             if (settype($value, $type)) {
                 yield $value;
             }
@@ -264,7 +264,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      */
     public function distinct(callable $comparer = null)
     {
-        return $this->map(function ($value) use ($comparer) {
+        return $this->map(static function ($value) use ($comparer) {
             static $previous;
 
             if ($comparer ? !$comparer($value, $previous) : $value != $previous) {
@@ -439,7 +439,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      */
     public function ofType($type)
     {
-        return $this->filter(function ($value) use ($type) {
+        return $this->filter(static function ($value) use ($type) {
             return gettype($value) == $type;
         });
     }
@@ -455,7 +455,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      */
     public function ofClass($className)
     {
-        return $this->filter(function ($value) use ($className) {
+        return $this->filter(static function ($value) use ($className) {
             return is_object($value) && get_class($value) == $className;
         });
     }
@@ -488,7 +488,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      */
     public static function range(int $start, int $count)
     {
-        return static::from(function () use ($start, $count) {
+        return static::from(static function () use ($start, $count) {
             do {
                 yield $start;
                 $start += 1;
@@ -504,7 +504,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      */
     public static function repeat($element, int $count)
     {
-        return static::from(function () use ($element, $count) {
+        return static::from(static function () use ($element, $count) {
             do {
                 yield $element;
             } while ($count -= 1);
@@ -536,7 +536,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
             return $this->selectAll();
         }
 
-        return $this->map(function ($value) use ($selector) {
+        return $this->map(static function ($value) use ($selector) {
             foreach ($selector($value) as $value) {
                 yield $value;
             }
@@ -545,7 +545,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
 
     private function selectAll()
     {
-        return $this->map(function ($value) {
+        return $this->map(static function ($value) {
             yield from $value;
         });
     }
@@ -589,7 +589,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      */
     public function skip(int $count)
     {
-        return $this->filter(function ($value) use ($count) {
+        return $this->filter(static function ($value) use ($count) {
             static $skipped = 0;
             $skipped += 1;
 
@@ -606,7 +606,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      */
     public function skipWhile(callable $predicate)
     {
-        return $this->filter(function ($value) use ($predicate) {
+        return $this->filter(static function ($value) use ($predicate) {
             static $bypass = true;
 
             if (!$bypass) {
