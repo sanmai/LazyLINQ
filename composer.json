@@ -26,7 +26,7 @@
     },
     "require": {
         "php": ">=7",
-        "sanmai/pipeline": "^0.7"
+        "sanmai/pipeline": "~0.7"
     },
     "scripts": {
         "test": "php vendor/bin/phpunit --no-coverage",
