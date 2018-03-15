@@ -282,6 +282,29 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @covers \LazyLINQ\LazyCollection::range
+     */
+    public function testRangeLazy()
+    {
+        /*
+         * Typical memory usage is the following:
+         *
+         * On 100 ints: 8432 with range(), 5232 with generators.
+         * On 10000 ints: 528624 with range(), 5232 with generators
+         */
+
+        $startUsage = memory_get_usage();
+        $array = range(1, LC::LAZY_RANGE_MIN_COUNT - 1);
+        $referenceUsage = memory_get_usage() - $startUsage;
+
+        $usage = memory_get_usage();
+        $range = LC::range(1, LC::LAZY_RANGE_MIN_COUNT);
+        $this->assertLessThan($referenceUsage, memory_get_usage() - $usage);
+
+        $this->assertEquals(array_sum(range(1, LC::LAZY_RANGE_MIN_COUNT)), $range->sum());
+    }
+
+    /**
      * @covers \LazyLINQ\LazyCollection::repeat
      */
     public function testRepeat()
