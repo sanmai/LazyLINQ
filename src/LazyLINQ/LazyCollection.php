@@ -112,6 +112,12 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
             $this->filter($predicate);
         }
 
+        /*
+         * foreach is marginally faster than using embedded \Iterator:
+         *
+         * $this->getIterator()->rewind();
+         * return $this->getIterator()->valid();
+         */
         foreach ($this as $value) {
             return true;
         }
