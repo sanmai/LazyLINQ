@@ -75,5 +75,9 @@ Only non-lazy (or eager) methods are left out as they can't have a correct lazy 
 
 For all inputs, keys are not preserved nor used. If you absolutely need to keep the keys, consider storing them with the data.
 
-This library is built to last. Whatever you throw at it, it should just work. There's only one method marked above that may throw an exception: .NET API requires that, so it was unavoidable. Other than that, you can expect only standard language errors to happen.
+# Durability
+
+This library is built to last. Whatever you throw at it, it should just work.
+
+There's only one method marked above that may throw an exception: .NET API requires that, so it was unavoidable. Other than that, you can expect only standard language errors to happen.
 
