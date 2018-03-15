@@ -128,11 +128,10 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      */
     public function append($element)
     {
+        // `yield from` is about four times faster than \AppendIterator
+        // and about 50% faster than `foreach-yield`
         return static::from(function () use ($element) {
-            foreach ($this as $value) {
-                yield $value;
-            }
-
+            yield from $this;
             yield $element;
         });
     }
@@ -188,13 +187,8 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
     public function concat($second)
     {
         return static::from(function () use ($second) {
-            foreach ($this as $value) {
-                yield $value;
-            }
-
-            foreach ($second as $value) {
-                yield $value;
-            }
+            yield from $this;
+            yield from $second;
         });
     }
 
@@ -471,10 +465,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
     {
         return static::from(function () use ($element) {
             yield $element;
-
-            foreach ($this as $value) {
-                yield $value;
-            }
+            yield from $this;
         });
     }
 
