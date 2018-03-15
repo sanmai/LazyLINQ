@@ -216,6 +216,7 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
     public function testMax()
     {
         $this->assertSame(4, LC::from([1, 2, 4, 3])->max());
+        $this->assertSame(1, LC::from([1, null, -1])->max());
         $this->assertSame(4, LC::from(['foo', 'bar', 'test', 'baz'])->max('strlen'));
     }
 
@@ -226,6 +227,7 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertSame(-2, LC::from([1, -2, 4, 3])->min());
         $this->assertSame(4, LC::from([7, 5, 4, 8])->min());
+        $this->assertSame(null, LC::from([1, 2, 3, null])->min());
         $this->assertSame(2, LC::from(['foo', 'bar', 'gg', 'test', 'baz'])->min('strlen'));
     }
 
