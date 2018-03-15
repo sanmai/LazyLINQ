@@ -80,6 +80,10 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
             return is_int($value);
         }));
         $this->assertTrue(LC::from(['foo', 1, 'bar'])->any('is_int'));
+
+        $this->assertTrue((new LC())->map(function () {
+            return 0;
+        })->any());
     }
 
     /**
