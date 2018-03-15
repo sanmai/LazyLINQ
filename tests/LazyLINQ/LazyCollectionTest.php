@@ -384,6 +384,13 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame([], LC::range(1, 3)->take(0)->toArray());
         $this->assertSame([], LC::range(1, 3)->take(-1)->toArray());
         $this->assertSame([1, 2], LC::range(1, 3)->take(2)->toArray());
+
+        $this->assertSame([1, 2], LC::from(function () {
+            yield 1;
+            yield 2;
+            yield 3;
+            $this->fail();
+        })->take(2)->toArray());
     }
 
     /**
@@ -392,6 +399,12 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
     public function testTakeWhile()
     {
         $this->assertSame([1, 2], LC::from([1, 2, 'foo', 'bar'])->takeWhile('is_int')->toArray());
+
+        $this->assertSame([1], LC::from(function () {
+            yield 1;
+            yield 'foo';
+            $this->fail();
+        })->takeWhile('is_int')->toArray());
     }
 
     /**
