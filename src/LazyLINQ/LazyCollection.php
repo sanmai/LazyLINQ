@@ -112,6 +112,12 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
             $this->filter($predicate);
         }
 
+        /*
+         * foreach is marginally faster than using embedded \Iterator:
+         *
+         * $this->getIterator()->rewind();
+         * return $this->getIterator()->valid();
+         */
         foreach ($this as $value) {
             return true;
         }
@@ -128,11 +134,10 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      */
     public function append($element)
     {
+        // `yield from` is about four times faster than \AppendIterator
+        // and about 50% faster than `foreach-yield`
         return static::from(function () use ($element) {
-            foreach ($this as $value) {
-                yield $value;
-            }
-
+            yield from $this;
             yield $element;
         });
     }
@@ -188,13 +193,8 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
     public function concat($second)
     {
         return static::from(function () use ($second) {
-            foreach ($this as $value) {
-                yield $value;
-            }
-
-            foreach ($second as $value) {
-                yield $value;
-            }
+            yield from $this;
+            yield from $second;
         });
     }
 
@@ -471,12 +471,16 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
     {
         return static::from(function () use ($element) {
             yield $element;
-
-            foreach ($this as $value) {
-                yield $value;
-            }
+            yield from $this;
         });
     }
+
+    /**
+     * Determines from which number of sequential integers a lazy generator should be used.
+     *
+     * @var int
+     */
+    const LAZY_RANGE_MIN_COUNT = 101;
 
     /**
      * Generates a sequence of integral numbers within a specified range.
@@ -488,6 +492,17 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      */
     public static function range(int $start, int $count)
     {
+        /*
+         * Typical memory usage is the following:
+         *
+         * On 100 ints: 8432 with range(), 5232 with a generator.
+         * On 10000 ints: 528624 with range(), 5232 with a generator.
+         */
+
+        if ($count < static::LAZY_RANGE_MIN_COUNT) {
+            return new static(new \ArrayIterator(range($start, $start + $count - 1)));
+        }
+
         return static::from(static function () use ($start, $count) {
             do {
                 yield $start;

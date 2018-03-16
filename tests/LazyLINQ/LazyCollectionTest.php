@@ -80,6 +80,10 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
             return is_int($value);
         }));
         $this->assertTrue(LC::from(['foo', 1, 'bar'])->any('is_int'));
+
+        $this->assertTrue((new LC())->map(function () {
+            return 0;
+        })->any());
     }
 
     /**
@@ -216,6 +220,7 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
     public function testMax()
     {
         $this->assertSame(4, LC::from([1, 2, 4, 3])->max());
+        $this->assertSame(1, LC::from([1, null, -1])->max());
         $this->assertSame(4, LC::from(['foo', 'bar', 'test', 'baz'])->max('strlen'));
     }
 
@@ -226,6 +231,7 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertSame(-2, LC::from([1, -2, 4, 3])->min());
         $this->assertSame(4, LC::from([7, 5, 4, 8])->min());
+        $this->assertSame(null, LC::from([1, 2, 3, null])->min());
         $this->assertSame(2, LC::from(['foo', 'bar', 'gg', 'test', 'baz'])->min('strlen'));
     }
 
@@ -279,6 +285,29 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         })->toArray());
 
         $this->assertEquals([-1, 0, 1, 2], LC::range(-1, 4)->toArray());
+    }
+
+    /**
+     * @covers \LazyLINQ\LazyCollection::range
+     */
+    public function testRangeLazy()
+    {
+        /*
+         * Typical memory usage is the following:
+         *
+         * On 100 ints: 8432 with range(), 5232 with generators.
+         * On 10000 ints: 528624 with range(), 5232 with generators
+         */
+
+        $startUsage = memory_get_usage();
+        $array = range(1, LC::LAZY_RANGE_MIN_COUNT - 1);
+        $referenceUsage = memory_get_usage() - $startUsage;
+
+        $usage = memory_get_usage();
+        $range = LC::range(1, LC::LAZY_RANGE_MIN_COUNT);
+        $this->assertLessThan($referenceUsage, memory_get_usage() - $usage);
+
+        $this->assertEquals(array_sum(range(1, LC::LAZY_RANGE_MIN_COUNT)), $range->sum());
     }
 
     /**
