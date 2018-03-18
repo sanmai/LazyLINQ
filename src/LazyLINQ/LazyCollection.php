@@ -557,9 +557,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
         }
 
         return $this->map(static function ($value) use ($selector) {
-            foreach ($selector($value) as $value) {
-                yield $value;
-            }
+            yield from $selector($value);
         });
     }
 
