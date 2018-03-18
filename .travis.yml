@@ -27,5 +27,5 @@ script:
   - php vendor/bin/infection --min-msi=90 --min-covered-msi=99 --log-verbosity=2 --threads=4
 
 after_success:
-  - travis_retry php vendor/bin/coveralls
+  - travis_retry php vendor/bin/php-coveralls
   - travis_retry php vendor/bin/codacycoverage clover build/logs/clover.xml
