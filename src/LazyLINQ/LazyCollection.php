@@ -155,7 +155,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
             $this->map($selector);
         }
 
-        $result = $this->reduce(static function ($carry, $value) use ($selector) {
+        $result = $this->reduce(static function ($carry, $value) {
             $carry->sum += $value;
             $carry->count += 1;
 
