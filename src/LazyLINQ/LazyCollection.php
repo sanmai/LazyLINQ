@@ -695,16 +695,6 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
     }
 
     /**
-     * Creates an array from a collection.
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        return iterator_to_array($this, false);
-    }
-
-    /**
      * Filters a sequence of values based on a predicate.
      *
      * @param callable $predicate a function to test each element for a condition
