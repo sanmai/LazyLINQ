@@ -40,6 +40,9 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         })->toArray());
 
         $this->assertSame([null], LC::from(null)->toArray());
+
+        $this->assertEquals(0, LC::from(null)->sum());
+        $this->assertEquals([$this], LC::from($this)->toArray());
     }
 
     /**
