@@ -221,7 +221,17 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertSame(4, LC::from([1, 2, 4, 3])->max());
         $this->assertSame(1, LC::from([1, null, -1])->max());
+        $this->assertSame(3, LC::from([1, 2, 3, 'bar'])->max());
         $this->assertSame(4, LC::from(['foo', 'bar', 'test', 'baz'])->max('strlen'));
+        $this->assertSame([4], LC::from([[1], [2], [4], [3]])->max());
+
+        $max = (object) ['a' => 4];
+        $this->assertSame($max, LC::from([
+            (object) ['a' => 2],
+            $max,
+            (object) ['a' => 3],
+            (object) ['a' => 4],
+        ])->max());
     }
 
     /**
@@ -232,7 +242,17 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(-2, LC::from([1, -2, 4, 3])->min());
         $this->assertSame(4, LC::from([7, 5, 4, 8])->min());
         $this->assertSame(null, LC::from([1, 2, 3, null])->min());
+        $this->assertSame('bar', LC::from([1, 2, 3, 'bar'])->min());
         $this->assertSame(2, LC::from(['foo', 'bar', 'gg', 'test', 'baz'])->min('strlen'));
+        $this->assertSame([3], LC::from([[5], [3], [4], [8]])->min());
+
+        $min = (object) ['a' => 1];
+        $this->assertSame($min, LC::from([
+            (object) ['a' => 2],
+            $min,
+            (object) ['a' => 3],
+            (object) ['a' => 1],
+        ])->min());
     }
 
     /**
