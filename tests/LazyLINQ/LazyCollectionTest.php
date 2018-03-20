@@ -40,6 +40,9 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         })->toArray());
 
         $this->assertSame([null], LC::from(null)->toArray());
+
+        $this->assertEquals(0, LC::from(null)->sum());
+        $this->assertEquals([$this], LC::from($this)->toArray());
     }
 
     /**
@@ -221,7 +224,17 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertSame(4, LC::from([1, 2, 4, 3])->max());
         $this->assertSame(1, LC::from([1, null, -1])->max());
+        $this->assertSame(3, LC::from([1, 2, 3, 'bar'])->max());
         $this->assertSame(4, LC::from(['foo', 'bar', 'test', 'baz'])->max('strlen'));
+        $this->assertSame([4], LC::from([[1], [2], [4], [3]])->max());
+
+        $max = (object) ['a' => 4];
+        $this->assertSame($max, LC::from([
+            (object) ['a' => 2],
+            $max,
+            (object) ['a' => 3],
+            (object) ['a' => 4],
+        ])->max());
     }
 
     /**
@@ -232,7 +245,17 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(-2, LC::from([1, -2, 4, 3])->min());
         $this->assertSame(4, LC::from([7, 5, 4, 8])->min());
         $this->assertSame(null, LC::from([1, 2, 3, null])->min());
+        $this->assertSame('bar', LC::from([1, 2, 3, 'bar'])->min());
         $this->assertSame(2, LC::from(['foo', 'bar', 'gg', 'test', 'baz'])->min('strlen'));
+        $this->assertSame([3], LC::from([[5], [3], [4], [8]])->min());
+
+        $min = (object) ['a' => 1];
+        $this->assertSame($min, LC::from([
+            (object) ['a' => 2],
+            $min,
+            (object) ['a' => 3],
+            (object) ['a' => 1],
+        ])->min());
     }
 
     /**
@@ -285,6 +308,13 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         })->toArray());
 
         $this->assertEquals([-1, 0, 1, 2], LC::range(-1, 4)->toArray());
+
+        $count = 0;
+        foreach (LC::range(1, LC::LAZY_RANGE_MIN_COUNT) as $value) {
+            $this->assertGreaterThan(0, $value);
+            $count += 1;
+            $this->assertLessThanOrEqual(1000, $count);
+        }
     }
 
     /**
@@ -315,6 +345,13 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testRepeat()
     {
+        $count = 0;
+        foreach (LC::repeat(true, 10) as $value) {
+            $this->assertTrue($value);
+            $count += 1;
+            $this->assertLessThanOrEqual(10, $count);
+        }
+
         $this->assertEquals([true, true, true, true], LC::repeat(true, 4)->toArray());
     }
 

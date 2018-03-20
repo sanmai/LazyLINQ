@@ -420,10 +420,15 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
             $this->map($selector);
         }
 
-        $min = PHP_INT_MAX;
+        $min = null;
 
         // We can load all values and be done with min(...$this),
         // but all values could take more memory than we have
+        foreach ($this as $value) {
+            $min = $value;
+            break;
+        }
+
         foreach ($this as $value) {
             if ($value < $min) {
                 $min = $value;
