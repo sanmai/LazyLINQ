@@ -74,7 +74,7 @@ Powered by generators, this library works in a lazy way: instead of doing comput
 
 Only non-lazy (or eager) methods are left out as they can't have a correct lazy implementation with generators. Sure, they could be implemented as standard deferred methods, but still, they'll want all the data at once.
 
-For all inputs, keys are not preserved nor used. If you absolutely need to keep the keys, consider storing them with the data.
+For all inputs, keys are not exported nor used. If you absolutely need to access keys, consider storing them with the data.
 
 # Durability
 

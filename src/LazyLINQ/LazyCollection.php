@@ -375,6 +375,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
         $value = null;
 
         foreach ($this as $value) {
+            // Not casting to an array here to save memory and some cycles
         }
 
         return $value;
@@ -395,6 +396,8 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
 
         $max = null; // everything is greater than null
 
+        // We can load all values and be done with max(...$this),
+        // but all values could take more memory than we have
         foreach ($this as $value) {
             if ($value > $max) {
                 $max = $value;
@@ -419,6 +422,8 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
 
         $min = PHP_INT_MAX;
 
+        // We can load all values and be done with min(...$this),
+        // but all values could take more memory than we have
         foreach ($this as $value) {
             if ($value < $min) {
                 $min = $value;
@@ -552,9 +557,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
         }
 
         return $this->map(static function ($value) use ($selector) {
-            foreach ($selector($value) as $value) {
-                yield $value;
-            }
+            yield from $selector($value);
         });
     }
 
@@ -692,16 +695,6 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
                 yield $value;
             }
         });
-    }
-
-    /**
-     * Creates an array from a collection.
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        return iterator_to_array($this, false);
     }
 
     /**
