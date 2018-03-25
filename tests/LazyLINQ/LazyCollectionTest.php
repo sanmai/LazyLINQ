@@ -128,6 +128,11 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertSame([1, 2, 3, 4], LC::from([1, 2])->concat([3, 4])->toArray());
         $this->assertSame([1, 2, 3, 4], LC::from([1, 2])->concat(LC::from([3, 4]))->toArray());
+
+        $LC = LC::from([1, 2]);
+        $LC->concat([3, 4]);
+
+        $this->assertSame([1, 2, 3, 4], $LC->toArray());
     }
 
     /**

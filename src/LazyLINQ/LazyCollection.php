@@ -199,8 +199,8 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      */
     public function concat($second)
     {
-        return static::from(function () use ($second) {
-            yield from $this;
+        return $this->replace(function ($previous) use ($second) {
+            yield from $previous;
             yield from $second;
         });
     }
