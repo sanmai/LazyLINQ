@@ -86,10 +86,10 @@ prerequisites: build/cache vendor/bin .phan
 build/cache:
 	mkdir -p build/cache
 
-vendor/bin:
+vendor/autoload.php:
 	$(SILENT) $(COMPOSER) install --prefer-dist
 
-composer.lock: vendor/bin
+composer.lock: vendor/autoload.php
 composer.lock: composer.json
 	$(SILENT) $(COMPOSER) update && touch composer.lock
 
