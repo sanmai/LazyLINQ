@@ -19,19 +19,33 @@ declare(strict_types=1);
 
 namespace LazyLINQ;
 
-final class ProxyUnchain
+final class ProxyUnchain implements \IteratorAggregate, \JsonSerializable
 {
     private $target;
 
-    public function __construct($target)
+    public function __construct(\IteratorAggregate $target)
     {
         $this->target = $target;
     }
 
     public function __call(string $name, array $arguments)
     {
-        $this->target->{$name}(...$arguments);
+        $result = $this->target->{$name}(...$arguments);
 
-        return $this->target;
+        if ($result instanceof $this->target) {
+            return $this->target;
+        }
+
+        return $result;
+    }
+
+    public function getIterator()
+    {
+        return $this->target->getIterator();
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->target->jsonSerialize();
     }
 }
