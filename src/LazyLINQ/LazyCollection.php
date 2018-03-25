@@ -316,8 +316,8 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
             return $this->exceptEquals($collection);
         }
 
-        return static::from(function () use ($collection, $comparer) {
-            foreach ($this as $value) {
+        return $this->replace(function ($previous) use ($collection, $comparer) {
+            foreach ($previous as $value) {
                 foreach ($collection as $excluded) {
                     if ($comparer($value, $excluded)) {
                         continue 2;
@@ -331,8 +331,8 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
 
     private function exceptArray(array $collection)
     {
-        return static::from(function () use ($collection) {
-            foreach ($this as $value) {
+        return $this->replace(function ($previous) use ($collection) {
+            foreach ($previous as $value) {
                 if (!in_array($value, $collection)) {
                     yield $value;
                 }
@@ -342,8 +342,8 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
 
     private function exceptEquals($collection)
     {
-        return static::from(function () use ($collection) {
-            foreach ($this as $value) {
+        return $this->replace(function ($previous) use ($collection) {
+            foreach ($previous as $value) {
                 foreach ($collection as $excluded) {
                     if ($value == $excluded) {
                         continue 2;

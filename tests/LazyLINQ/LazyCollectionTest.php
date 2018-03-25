@@ -195,6 +195,10 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([2.0, 2.3, 2.4, 2.5], LC::from([2.0, 2.0, 2.1, 2.2, 2.3, 2.3, 2.4, 2.5])->except([2.2, 2.1])->toArray());
 
         $this->assertEquals(1, LC::from([1, 2, 1])->except([2, 3, 2])->single());
+
+        $LC = LC::from([1, 2, 1]);
+        $LC->except([2, 3, 2]);
+        $this->assertEquals(1, $LC->single());
     }
 
     /**
@@ -204,6 +208,10 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(1, LC::from([1, 2, 1])->except(LC::from([2, 3, 2]))->single());
         $this->assertEquals('test', LC::from(['test', 'foo', 'bar', 'baz'])->except(LC::from(['foo', 'bar', 'baz']))->single());
+
+        $LC = LC::from(['test', 'foo', 'bar', 'baz']);
+        $LC->except(LC::from(['foo', 'bar', 'baz']));
+        $this->assertEquals('test', $LC->single());
     }
 
     /**
@@ -214,6 +222,12 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['test', 'x', 'y', 'z'], LC::from(['test', 'foo', 'bar', 'baz', 'aa', 'bb', 'cc', 'x', 'y', 'z'])->except([2, 3], function ($value, $notAllowed) {
             return strlen($value) == $notAllowed;
         })->toArray());
+
+        $LC = LC::from(['test', 'foo', 'bar', 'baz', 'aa', 'bb', 'cc', 'x', 'y', 'z']);
+        $LC->except([2, 3], function ($value, $notAllowed) {
+            return strlen($value) == $notAllowed;
+        });
+        $this->assertEquals(['test', 'x', 'y', 'z'], $LC->toArray());
     }
 
     /**
