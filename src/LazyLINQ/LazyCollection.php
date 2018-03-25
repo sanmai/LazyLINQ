@@ -747,8 +747,8 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
             : static::from($collection)->getIterator()
         );
 
-        $result = static::from(function () use ($collection) {
-            foreach ($this as $firstValue) {
+        $this->replace(function ($previous) use ($collection) {
+            foreach ($previous as $firstValue) {
                 foreach ($collection as $secondValue) {
                     yield [
                         $firstValue,
@@ -762,10 +762,10 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
         });
 
         if ($resultSelector) {
-            $result->unpack($resultSelector);
+            $this->unpack($resultSelector);
         }
 
-        return $result;
+        return $this;
     }
 
     public function jsonSerialize()
