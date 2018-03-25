@@ -143,7 +143,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
     {
         // `yield from` is about four times faster than \AppendIterator
         // and about 50% faster than `foreach-yield`
-        return $this->replace(function ($previous) use ($element) {
+        return $this->replace(static function ($previous) use ($element) {
             yield from $previous;
             yield $element;
         });
@@ -199,7 +199,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      */
     public function concat($second)
     {
-        return $this->replace(function ($previous) use ($second) {
+        return $this->replace(static function ($previous) use ($second) {
             yield from $previous;
             yield from $second;
         });
@@ -316,7 +316,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
             return $this->exceptEquals($collection);
         }
 
-        return $this->replace(function ($previous) use ($collection, $comparer) {
+        return $this->replace(static function ($previous) use ($collection, $comparer) {
             foreach ($previous as $value) {
                 foreach ($collection as $excluded) {
                     if ($comparer($value, $excluded)) {
@@ -331,7 +331,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
 
     private function exceptArray(array $collection)
     {
-        return $this->replace(function ($previous) use ($collection) {
+        return $this->replace(static function ($previous) use ($collection) {
             foreach ($previous as $value) {
                 if (!in_array($value, $collection)) {
                     yield $value;
@@ -342,7 +342,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
 
     private function exceptEquals($collection)
     {
-        return $this->replace(function ($previous) use ($collection) {
+        return $this->replace(static function ($previous) use ($collection) {
             foreach ($previous as $value) {
                 foreach ($collection as $excluded) {
                     if ($value == $excluded) {
@@ -493,7 +493,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      */
     public function prepend($element)
     {
-        return $this->replace(function ($previous) use ($element) {
+        return $this->replace(static function ($previous) use ($element) {
             yield $element;
             yield from $previous;
         });
@@ -683,7 +683,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      */
     public function take(int $count)
     {
-        return $this->replace(function ($previous) use ($count) {
+        return $this->replace(static function ($previous) use ($count) {
             foreach ($previous as $value) {
                 if ($count <= 0) {
                     break;
@@ -705,7 +705,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      */
     public function takeWhile(callable $predicate)
     {
-        return $this->replace(function ($previous) use ($predicate) {
+        return $this->replace(static function ($previous) use ($predicate) {
             foreach ($previous as $value) {
                 if (!$predicate($value)) {
                     break;
@@ -747,7 +747,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
             : static::from($collection)->getIterator()
         );
 
-        $this->replace(function ($previous) use ($collection) {
+        $this->replace(static function ($previous) use ($collection) {
             foreach ($previous as $firstValue) {
                 foreach ($collection as $secondValue) {
                     yield [
