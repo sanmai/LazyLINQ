@@ -683,8 +683,8 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      */
     public function take(int $count)
     {
-        return static::from(function () use ($count) {
-            foreach ($this as $value) {
+        return $this->replace(function ($previous) use ($count) {
+            foreach ($previous as $value) {
                 if ($count <= 0) {
                     break;
                 }
