@@ -97,6 +97,11 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
     public function testAppend()
     {
         $this->assertSame(['foo', 'bar', 'baz'], LC::from(['foo', 'bar'])->append('baz')->toArray());
+
+        $LC = LC::from(['foo', 'bar']);
+        $LC->append('baz');
+
+        $this->assertSame(['foo', 'bar', 'baz'], $LC->toArray());
     }
 
     /**

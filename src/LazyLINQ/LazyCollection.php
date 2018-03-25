@@ -33,7 +33,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      *
      * @return static
      */
-    public static function from($source)
+    public static function from($source, ...$args)
     {
         if (is_array($source)) {
             return new static(new \ArrayIterator($source));
@@ -44,10 +44,15 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
         }
 
         if ($source instanceof \Closure) {
-            return static::from($source());
+            return static::from($source(...$args));
         }
 
         return new static(new \ArrayIterator([$source]));
+    }
+
+    private function replace(callable $func)
+    {
+        return $this->map(static::from($func, clone $this));
     }
 
     /**
@@ -138,8 +143,8 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
     {
         // `yield from` is about four times faster than \AppendIterator
         // and about 50% faster than `foreach-yield`
-        return static::from(function () use ($element) {
-            yield from $this;
+        return $this->replace(function ($previous) use ($element) {
+            yield from $previous;
             yield $element;
         });
     }
