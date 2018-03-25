@@ -322,6 +322,10 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
     public function testPrepend()
     {
         $this->assertSame(['baz', 'foo', 'bar'], LC::from(['foo', 'bar'])->prepend('baz')->toArray());
+
+        $LC = LC::from(['foo', 'bar']);
+        $LC->prepend('baz');
+        $this->assertSame(['baz', 'foo', 'bar'], $LC->toArray());
     }
 
     /**

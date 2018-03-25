@@ -493,9 +493,9 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      */
     public function prepend($element)
     {
-        return static::from(function () use ($element) {
+        return $this->replace(function ($previous) use ($element) {
             yield $element;
-            yield from $this;
+            yield from $previous;
         });
     }
 
