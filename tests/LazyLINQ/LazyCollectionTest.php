@@ -478,7 +478,7 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testWhere()
     {
-        $this->assertSame(['foo', 'bar'], LC::from([1, 2, 'foo', 'bar', 3, 'a'])->where(function ($value) {
+        $this->assertSame(['foo', 'bar'], LC::from(['foo', 'bar', 'a'])->where(function ($value) {
             return strlen($value) > 1;
         })->toArray());
     }
