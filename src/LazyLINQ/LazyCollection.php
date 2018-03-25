@@ -266,6 +266,13 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
     {
         return $this->map(static function ($value) use ($comparer) {
             static $previous;
+            static $previousSeen = false;
+
+            if (!$previousSeen) {
+                $previousSeen = true;
+                $previous = $value;
+                yield $value;
+            }
 
             if ($comparer ? !$comparer($value, $previous) : $value != $previous) {
                 $previous = $value;
