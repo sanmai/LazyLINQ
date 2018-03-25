@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace LazyLINQ;
 
 use LazyLINQ\LazyCollection as LC;
+use LazyLINQ\Util\ProxyUnchain;
 
 /**
  * @covers \LazyLINQ\LazyCollection

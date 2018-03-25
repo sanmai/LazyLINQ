@@ -17,7 +17,7 @@
 
 declare(strict_types=1);
 
-namespace LazyLINQ;
+namespace LazyLINQ\Util;
 
 final class ProxyUnchain implements \IteratorAggregate, \JsonSerializable
 {
