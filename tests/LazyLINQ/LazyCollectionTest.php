@@ -187,19 +187,30 @@ class LazyCollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::except
+     * @covers \LazyLINQ\LazyCollection::exceptArray
      */
-    public function testExcept()
+    public function testExceptArray()
     {
         $this->assertEquals([2.0, 2.1, 2.3, 2.4, 2.5], LC::from([2.0, 2.0, 2.1, 2.2, 2.3, 2.3, 2.4, 2.5])->except([2.2])->toArray());
         $this->assertEquals([2.0, 2.3, 2.4, 2.5], LC::from([2.0, 2.0, 2.1, 2.2, 2.3, 2.3, 2.4, 2.5])->except([2.2, 2.1])->toArray());
 
         $this->assertEquals(1, LC::from([1, 2, 1])->except([2, 3, 2])->single());
+    }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::exceptEquals
+     */
+    public function testExceptEquals()
+    {
         $this->assertEquals(1, LC::from([1, 2, 1])->except(LC::from([2, 3, 2]))->single());
-
         $this->assertEquals('test', LC::from(['test', 'foo', 'bar', 'baz'])->except(LC::from(['foo', 'bar', 'baz']))->single());
+    }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::except
+     */
+    public function testExceptFull()
+    {
         $this->assertEquals(['test', 'x', 'y', 'z'], LC::from(['test', 'foo', 'bar', 'baz', 'aa', 'bb', 'cc', 'x', 'y', 'z'])->except([2, 3], function ($value, $notAllowed) {
             return strlen($value) == $notAllowed;
         })->toArray());
