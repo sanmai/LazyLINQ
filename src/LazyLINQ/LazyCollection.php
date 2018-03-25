@@ -705,8 +705,8 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      */
     public function takeWhile(callable $predicate)
     {
-        return static::from(function () use ($predicate) {
-            foreach ($this as $value) {
+        return $this->replace(function ($previous) use ($predicate) {
+            foreach ($previous as $value) {
                 if (!$predicate($value)) {
                     break;
                 }
