@@ -185,13 +185,7 @@ class LazyCollection extends \Pipeline\Simple implements Interfaces\Collection
             $this->map($predicate)->filter();
         }
 
-        $count = 0;
-
-        foreach ($this as $value) {
-            $count += 1;
-        }
-
-        return $count;
+        return \iterator_count($this);
     }
 
     public function distinct(callable $comparer = null)
