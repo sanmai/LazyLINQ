@@ -24,7 +24,7 @@ use LazyLINQ\Errors\InvalidOperationException;
 /**
  * A partial lazy-only port of LINQ for PHP.
  */
-class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
+class LazyCollection extends \Pipeline\Simple implements Interfaces\Collection
 {
     /**
      * Constructs a new sequence using supplied elements, be it an array or an iterator.
@@ -80,7 +80,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      *
      * @return bool
      */
-    public function all(callable $predicate = null)
+    public function all(callable $predicate = null): bool
     {
         if (!$predicate) {
             return $this->allTrue();
@@ -113,7 +113,7 @@ class LazyCollection extends \Pipeline\Simple implements \JsonSerializable
      *
      * @return bool
      */
-    public function any(callable $predicate = null)
+    public function any(callable $predicate = null): bool
     {
         if ($predicate) {
             $this->filter($predicate);
