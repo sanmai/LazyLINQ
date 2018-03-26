@@ -396,20 +396,11 @@ class LazyCollection extends \Pipeline\Simple implements Interfaces\Collection
 
     public function selectMany(callable $selector = null)
     {
-        if (!$selector) {
-            return $this->selectAll();
+        if ($selector) {
+            $this->map($selector);
         }
 
-        return $this->map(static function ($value) use ($selector) {
-            yield from $selector($value);
-        });
-    }
-
-    private function selectAll()
-    {
-        return $this->map(static function ($value) {
-            yield from $value;
-        });
+        return $this->unpack();
     }
 
     public function single(callable $predicate = null)
