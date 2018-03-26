@@ -19,45 +19,52 @@ declare(strict_types=1);
 
 namespace LazyLINQ;
 
+use LazyLINQ\Collection as LINQ;
 use LazyLINQ\Errors\InvalidOperationException;
-use LazyLINQ\LazyCollection as LC;
 
 /**
- * @covers \LazyLINQ\LazyCollection
+ * @covers \LazyLINQ\Collection
  */
-abstract class TestCase extends \PHPUnit\Framework\TestCase
+abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @param mixed ...$args
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return \Pipeline\Interfaces\Pipeline|\LazyLINQ\Interfaces\Collection
+     */
+    abstract public static function newInstance(...$args);
+
+    /**
+     * @param mixed ...$args
+     *
+     * @return \Pipeline\Interfaces\Pipeline|\LazyLINQ\Interfaces\Collection
      */
     abstract public static function from(...$args);
 
     /**
      * @param mixed ...$args
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return \Pipeline\Interfaces\Pipeline|\LazyLINQ\Interfaces\Collection
      */
     abstract public static function empty(...$args);
 
     /**
      * @param mixed ...$args
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return \Pipeline\Interfaces\Pipeline|\LazyLINQ\Interfaces\Collection
      */
     abstract public static function range(...$args);
 
     /**
      * @param mixed ...$args
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return \Pipeline\Interfaces\Pipeline|\LazyLINQ\Interfaces\Collection
      */
     abstract public static function repeat(...$args);
 
     /**
-     * @covers \LazyLINQ\LazyCollection::from
-     * @covers \LazyLINQ\LazyCollection::toArray
+     * @covers \LazyLINQ\Collection::from
+     * @covers \LazyLINQ\Collection::toArray
      */
     public function testFrom()
     {
@@ -76,7 +83,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::aggregate
+     * @covers \LazyLINQ\Collection::aggregate
      */
     public function testAggregate()
     {
@@ -90,7 +97,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::all
+     * @covers \LazyLINQ\Collection::all
      */
     public function testAll()
     {
@@ -103,7 +110,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::any
+     * @covers \LazyLINQ\Collection::any
      */
     public function testAny()
     {
@@ -114,13 +121,13 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         }));
         $this->assertTrue(static::from(['foo', 1, 'bar'])->any('is_int'));
 
-        $this->assertTrue((new LC())->map(function () {
+        $this->assertTrue(static::newInstance()->map(function () {
             return 0;
         })->any());
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::append
+     * @covers \LazyLINQ\Collection::append
      */
     public function testAppend()
     {
@@ -128,7 +135,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::average
+     * @covers \LazyLINQ\Collection::average
      */
     public function testAverage()
     {
@@ -137,7 +144,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::cast
+     * @covers \LazyLINQ\Collection::cast
      */
     public function testCast()
     {
@@ -145,7 +152,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::concat
+     * @covers \LazyLINQ\Collection::concat
      */
     public function testConcat()
     {
@@ -154,7 +161,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::contains
+     * @covers \LazyLINQ\Collection::contains
      */
     public function testContains()
     {
@@ -171,7 +178,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::count
+     * @covers \LazyLINQ\Collection::count
      */
     public function testCount()
     {
@@ -180,7 +187,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::distinct
+     * @covers \LazyLINQ\Collection::distinct
      */
     public function testDistinct()
     {
@@ -193,7 +200,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::empty
+     * @covers \LazyLINQ\Collection::empty
      */
     public function testEmpty()
     {
@@ -205,7 +212,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::exceptArray
+     * @covers \LazyLINQ\Collection::exceptArray
      */
     public function testExceptArray()
     {
@@ -216,7 +223,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::exceptEquals
+     * @covers \LazyLINQ\Collection::exceptEquals
      */
     public function testExceptEquals()
     {
@@ -225,7 +232,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::except
+     * @covers \LazyLINQ\Collection::except
      */
     public function testExceptFull()
     {
@@ -235,7 +242,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::first
+     * @covers \LazyLINQ\Collection::first
      */
     public function testFirst()
     {
@@ -248,7 +255,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::last
+     * @covers \LazyLINQ\Collection::last
      */
     public function testLast()
     {
@@ -259,7 +266,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::max
+     * @covers \LazyLINQ\Collection::max
      */
     public function testMax()
     {
@@ -279,7 +286,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::min
+     * @covers \LazyLINQ\Collection::min
      */
     public function testMin()
     {
@@ -300,7 +307,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::ofType
+     * @covers \LazyLINQ\Collection::ofType
      */
     public function testOfType()
     {
@@ -312,7 +319,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::ofClass
+     * @covers \LazyLINQ\Collection::ofClass
      */
     public function testOfClass()
     {
@@ -321,7 +328,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::prepend
+     * @covers \LazyLINQ\Collection::prepend
      */
     public function testPrepend()
     {
@@ -329,7 +336,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::range
+     * @covers \LazyLINQ\Collection::range
      */
     public function testRange()
     {
@@ -351,7 +358,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $this->assertEquals([-1, 0, 1, 2], static::range(-1, 4)->toArray());
 
         $count = 0;
-        foreach (static::range(1, LC::LAZY_RANGE_MIN_COUNT) as $value) {
+        foreach (static::range(1, LINQ::LAZY_RANGE_MIN_COUNT) as $value) {
             $this->assertGreaterThan(0, $value);
             $count += 1;
             $this->assertLessThanOrEqual(1000, $count);
@@ -359,7 +366,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::range
+     * @covers \LazyLINQ\Collection::range
      */
     public function testRangeLazy()
     {
@@ -371,18 +378,18 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
          */
 
         $startUsage = memory_get_usage();
-        $array = range(1, LC::LAZY_RANGE_MIN_COUNT - 1);
+        $array = range(1, LINQ::LAZY_RANGE_MIN_COUNT - 1);
         $referenceUsage = memory_get_usage() - $startUsage;
 
         $usage = memory_get_usage();
-        $range = static::range(1, LC::LAZY_RANGE_MIN_COUNT);
+        $range = static::range(1, LINQ::LAZY_RANGE_MIN_COUNT);
         $this->assertLessThan($referenceUsage, memory_get_usage() - $usage);
 
-        $this->assertEquals(array_sum(range(1, LC::LAZY_RANGE_MIN_COUNT)), $range->sum());
+        $this->assertEquals(array_sum(range(1, LINQ::LAZY_RANGE_MIN_COUNT)), $range->sum());
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::repeat
+     * @covers \LazyLINQ\Collection::repeat
      */
     public function testRepeat()
     {
@@ -397,7 +404,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::select
+     * @covers \LazyLINQ\Collection::select
      */
     public function testSelect()
     {
@@ -407,7 +414,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::selectMany
+     * @covers \LazyLINQ\Collection::selectMany
      */
     public function testSelectMany()
     {
@@ -423,7 +430,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::single
+     * @covers \LazyLINQ\Collection::single
      */
     public function testSingle()
     {
@@ -434,7 +441,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::single
+     * @covers \LazyLINQ\Collection::single
      */
     public function testSingleFailsNoPredicate()
     {
@@ -444,7 +451,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::single
+     * @covers \LazyLINQ\Collection::single
      */
     public function testSingleFailsWithPredicate()
     {
@@ -456,7 +463,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::skip
+     * @covers \LazyLINQ\Collection::skip
      */
     public function testSkip()
     {
@@ -467,7 +474,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::skipWhile
+     * @covers \LazyLINQ\Collection::skipWhile
      */
     public function testSkipWhile()
     {
@@ -475,7 +482,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::sum
+     * @covers \LazyLINQ\Collection::sum
      */
     public function testSum()
     {
@@ -484,7 +491,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::take
+     * @covers \LazyLINQ\Collection::take
      */
     public function testTake()
     {
@@ -501,7 +508,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::takeWhile
+     * @covers \LazyLINQ\Collection::takeWhile
      */
     public function testTakeWhile()
     {
@@ -515,7 +522,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::where
+     * @covers \LazyLINQ\Collection::where
      */
     public function testWhere()
     {
@@ -525,7 +532,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::zip
+     * @covers \LazyLINQ\Collection::zip
      */
     public function testZip()
     {
@@ -551,10 +558,63 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \LazyLINQ\LazyCollection::jsonSerialize
+     * @covers \LazyLINQ\Collection::jsonSerialize
      */
     public function testJSON()
     {
         $this->assertSame('[1,2,3]', json_encode(static::from([1, 2, 3])));
+    }
+
+    /**
+     * @coversNothing
+     */
+    public function testSanity()
+    {
+        $mock = \Mockery::mock(\ArrayIterator::class);
+        $mock->shouldReceive('rewind')->once();
+        $mock->shouldReceive('valid')->andReturn(false)->once();
+
+        $this->assertEquals(0, static::from($mock)->sum());
+    }
+
+    /**
+     * @covers \LazyLINQ\Collection
+     */
+    public function testLaziness()
+    {
+        $spy = \Mockery::spy(\ArrayIterator::class);
+
+        $c = static::newInstance($spy);
+        $c->map(function ($value) {
+            yield $value;
+        })->map(function ($value) {
+            yield $value;
+        })->filter();
+
+        static::from($spy)->map(function ($value) {
+            yield $value;
+        })->map(function ($value) {
+            yield $value;
+        })->filter();
+
+        $spy->shouldNotReceive('rewind');
+    }
+
+    private function failingGenerator()
+    {
+        $this->fail();
+        yield false;
+    }
+
+    /**
+     * @covers \LazyLINQ\Collection
+     */
+    public function testFailingGenerator()
+    {
+        $collection = static::from($this->failingGenerator())->map(function ($value) {
+            yield $value;
+        })->filter();
+
+        $this->assertNotEmpty($collection);
     }
 }

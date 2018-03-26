@@ -19,13 +19,12 @@ declare(strict_types=1);
 
 namespace LazyLINQ;
 
-use LazyLINQ\Collection as LINQ;
-use LazyLINQ\Util\ProxyUnchain;
+use LazyLINQ\LazyCollection as LINQ;
 
 /**
  * @covers \LazyLINQ\LazyCollection
  */
-class UnchainedTest extends TestCase
+class LazyCollectionTest extends TestCase
 {
     /**
      * @param mixed ...$args
@@ -34,7 +33,7 @@ class UnchainedTest extends TestCase
      */
     public static function newInstance(...$args)
     {
-        return new ProxyUnchain(new LINQ(...$args));
+        return new LINQ(...$args);
     }
 
     /**
@@ -44,7 +43,7 @@ class UnchainedTest extends TestCase
      */
     public static function from(...$args)
     {
-        return new ProxyUnchain(LINQ::from(...$args));
+        return LINQ::from(...$args);
     }
 
     /**
@@ -54,7 +53,7 @@ class UnchainedTest extends TestCase
      */
     public static function empty(...$args)
     {
-        return new ProxyUnchain(LINQ::empty(...$args));
+        return LINQ::empty(...$args);
     }
 
     /**
@@ -64,7 +63,7 @@ class UnchainedTest extends TestCase
      */
     public static function range(...$args)
     {
-        return new ProxyUnchain(LINQ::range(...$args));
+        return LINQ::range(...$args);
     }
 
     /**
@@ -74,6 +73,6 @@ class UnchainedTest extends TestCase
      */
     public static function repeat(...$args)
     {
-        return new ProxyUnchain(LINQ::repeat(...$args));
+        return LINQ::repeat(...$args);
     }
 }

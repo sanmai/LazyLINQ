@@ -20,60 +20,59 @@ declare(strict_types=1);
 namespace LazyLINQ;
 
 use LazyLINQ\Collection as LINQ;
-use LazyLINQ\Util\ProxyUnchain;
 
 /**
- * @covers \LazyLINQ\LazyCollection
+ * @covers \LazyLINQ\Collection
  */
-class UnchainedTest extends TestCase
+class CollectionTest extends TestCase
 {
     /**
      * @param mixed ...$args
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return \LazyLINQ\Collection
      */
     public static function newInstance(...$args)
     {
-        return new ProxyUnchain(new LINQ(...$args));
+        return new LINQ(...$args);
     }
 
     /**
      * @param mixed ...$args
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return \LazyLINQ\Collection
      */
     public static function from(...$args)
     {
-        return new ProxyUnchain(LINQ::from(...$args));
+        return LINQ::from(...$args);
     }
 
     /**
      * @param mixed ...$args
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return \LazyLINQ\Collection
      */
     public static function empty(...$args)
     {
-        return new ProxyUnchain(LINQ::empty(...$args));
+        return LINQ::empty(...$args);
     }
 
     /**
      * @param mixed ...$args
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return \LazyLINQ\Collection
      */
     public static function range(...$args)
     {
-        return new ProxyUnchain(LINQ::range(...$args));
+        return LINQ::range(...$args);
     }
 
     /**
      * @param mixed ...$args
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return \LazyLINQ\Collection
      */
     public static function repeat(...$args)
     {
-        return new ProxyUnchain(LINQ::repeat(...$args));
+        return LINQ::repeat(...$args);
     }
 }
