@@ -617,4 +617,23 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         $this->assertNotEmpty($collection);
     }
+
+    public function testClosed()
+    {
+        $collection = static::from(function () {
+            yield 1;
+            yield 2;
+            yield 3;
+        });
+
+        $this->assertEquals(6, $collection->sum());
+
+        $collection->map(function ($i) {
+            yield $i + 1;
+        });
+
+        $this->expectException(\Exception::class);
+
+        $collection->any();
+    }
 }
