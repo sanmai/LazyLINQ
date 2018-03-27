@@ -53,7 +53,7 @@ class LazyCollection extends Collection
 
     public function __construct(\Traversable $input = null)
     {
-        $this->collection = new Collection($input);
+        $this->collection = new parent($input);
 
         $this->queue = [];
 
