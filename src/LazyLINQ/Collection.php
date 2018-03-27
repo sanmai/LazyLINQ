@@ -21,7 +21,7 @@ namespace LazyLINQ;
 
 use LazyLINQ\Errors\InvalidOperationException;
 
-class Collection extends \Pipeline\Simple implements Interfaces\Collection
+class Collection extends \Pipeline\Standard implements Interfaces\Collection
 {
     public static function from($source, ...$args)
     {
