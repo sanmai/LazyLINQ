@@ -96,4 +96,21 @@ class LazyCollectionTest extends TestCase
     {
         $this->assertEquals(55, static::range(1, 10)->reduce());
     }
+
+    public function testAllMethodsDefined()
+    {
+        $reflection = new \ReflectionClass(static::newInstance());
+        foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
+            if ($method->isStatic()) {
+                continue;
+            }
+
+            // Not overriding this method, no point
+            if ('__invoke' == $method->getName()) {
+                continue;
+            }
+
+            $this->assertSame($method->class, $reflection->getName(), "Method {$method->getName()}() is not defined on {$method->class}");
+        }
+    }
 }
