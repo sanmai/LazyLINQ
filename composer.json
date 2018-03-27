@@ -11,11 +11,12 @@
     "require-dev": {
         "phpunit/phpunit": ">=6",
         "php-coveralls/php-coveralls": "^2.0",
-        "friendsofphp/php-cs-fixer": "^2.4",
+        "friendsofphp/php-cs-fixer": "^2.11",
         "codacy/coverage": "^1.4",
         "phan/phan": "^0.12.1",
         "infection/infection": "^0.8.1",
-        "phpstan/phpstan": "^0.9.2"
+        "phpstan/phpstan": "^0.9.2",
+        "mockery/mockery": "^1.0"
     },
     "license": "Apache-2.0",
     "minimum-stability": "dev",
@@ -27,8 +28,8 @@
         "psr-4": {"LazyLINQ\\": "tests/LazyLINQ/"}
     },
     "require": {
-        "php": ">=7",
-        "sanmai/pipeline": "~1.0"
+        "php": "^7.0",
+        "sanmai/pipeline": "^1.4"
     },
     "scripts": {
         "test": "php vendor/bin/phpunit --no-coverage",

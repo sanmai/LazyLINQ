@@ -22,6 +22,7 @@ return PhpCsFixer\Config::create()
         '@Symfony' => true,
         '@PHP70Migration' => true,
         'array_syntax' => ['syntax' => 'short'],
+        'declare_strict_types' => true,
         'explicit_indirect_variable' => true,
         'no_superfluous_elseif' => true,
         'no_unreachable_default_argument_value' => true,
@@ -33,8 +34,9 @@ return PhpCsFixer\Config::create()
         'php_unit_test_class_requires_covers' => true,
         'phpdoc_add_missing_param_annotation' => true,
         'phpdoc_order' => true,
+        'standardize_increment' => false,
         'visibility_required' => true,
-        'header_comment' => ['header' => $header, 'separate' => 'bottom'],
+        'header_comment' => ['header' => $header, 'separate' => 'bottom', 'location' => 'after_open'],
     ])
     ->setFinder(
         PhpCsFixer\Finder::create()

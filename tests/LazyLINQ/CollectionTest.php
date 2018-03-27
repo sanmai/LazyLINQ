@@ -19,17 +19,17 @@ declare(strict_types=1);
 
 namespace LazyLINQ;
 
-use LazyLINQ\LazyCollection as LINQ;
+use LazyLINQ\Collection as LINQ;
 
 /**
- * @covers \LazyLINQ\LazyCollection
+ * @covers \LazyLINQ\Collection
  */
-class LazyCollectionTest extends TestCase
+class CollectionTest extends TestCase
 {
     /**
      * @param mixed ...$args
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return \LazyLINQ\Collection
      */
     public static function newInstance(...$args)
     {
@@ -39,7 +39,7 @@ class LazyCollectionTest extends TestCase
     /**
      * @param mixed ...$args
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return \LazyLINQ\Collection
      */
     public static function from(...$args)
     {
@@ -49,7 +49,7 @@ class LazyCollectionTest extends TestCase
     /**
      * @param mixed ...$args
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return \LazyLINQ\Collection
      */
     public static function empty(...$args)
     {
@@ -59,7 +59,7 @@ class LazyCollectionTest extends TestCase
     /**
      * @param mixed ...$args
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return \LazyLINQ\Collection
      */
     public static function range(...$args)
     {
@@ -69,51 +69,10 @@ class LazyCollectionTest extends TestCase
     /**
      * @param mixed ...$args
      *
-     * @return \LazyLINQ\LazyCollection
+     * @return \LazyLINQ\Collection
      */
     public static function repeat(...$args)
     {
         return LINQ::repeat(...$args);
-    }
-
-    /**
-     * @covers \LazyLINQ\LazyCollection::unpack
-     */
-    public function testUnpack()
-    {
-        $this->assertEquals((10 * 11) / 2, static::from([
-            [1],
-            [2, 3],
-            [4, 5, 6],
-            [7, 8, 9, 10],
-        ])->unpack()->sum());
-    }
-
-    /**
-     * @covers \LazyLINQ\LazyCollection::unpack
-     */
-    public function testReduce()
-    {
-        $this->assertEquals(55, static::range(1, 10)->reduce());
-    }
-
-    /**
-     * @covers \LazyLINQ\LazyCollection::__invoke
-     */
-    public function testInvoke()
-    {
-        $this->assertEquals(15, static::from(static::range(1, 5)())->reduce());
-    }
-
-    public function testAllMethodsDefined()
-    {
-        $reflection = new \ReflectionClass(static::newInstance());
-        foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
-            if ($method->isStatic()) {
-                continue;
-            }
-
-            $this->assertSame($method->class, $reflection->getName(), "Method {$method->getName()}() is not defined on {$method->class}");
-        }
     }
 }
