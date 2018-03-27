@@ -134,13 +134,6 @@ class Collection extends \Pipeline\Standard implements Interfaces\Collection
         });
     }
 
-    /**
-     * Concatenates two sequences.
-     *
-     * @param \Traversable|array $second the sequence to concatenate
-     *
-     * @return static new instance
-     */
     public function concat($second)
     {
         return $this->replace(static function ($previous) use ($second) {
