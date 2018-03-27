@@ -235,4 +235,9 @@ class LazyCollection extends Collection
     {
         return $this->immediate()->getIterator();
     }
+
+    public function __invoke()
+    {
+        yield from $this->immediate();
+    }
 }

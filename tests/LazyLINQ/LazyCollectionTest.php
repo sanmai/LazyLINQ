@@ -97,16 +97,19 @@ class LazyCollectionTest extends TestCase
         $this->assertEquals(55, static::range(1, 10)->reduce());
     }
 
+    /**
+     * @covers \LazyLINQ\LazyCollection::__invoke
+     */
+    public function testInvoke()
+    {
+        $this->assertEquals(15, static::from(static::range(1, 5)())->reduce());
+    }
+
     public function testAllMethodsDefined()
     {
         $reflection = new \ReflectionClass(static::newInstance());
         foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
             if ($method->isStatic()) {
-                continue;
-            }
-
-            // Not overriding this method, no point
-            if ('__invoke' == $method->getName()) {
                 continue;
             }
 
