@@ -21,8 +21,25 @@ namespace LazyLINQ;
 
 use LazyLINQ\Errors\InvalidOperationException;
 
-class Collection extends \Pipeline\Standard implements Interfaces\Collection
+class Collection implements Interfaces\Collection
 {
+    /**
+     * @var \Pipeline\Standard
+     */
+    private $pipeline;
+
+    /**
+     * Contructor with a source of data. Not part of any interface, will be removed in future.
+     *
+     * @param \Traversable|null $input
+     *
+     * @deprecated
+     */
+    public function __construct(\Traversable $input = null)
+    {
+        $this->pipeline = new \Pipeline\Standard($input);
+    }
+
     public static function from($source, ...$args)
     {
         if (is_array($source)) {
@@ -42,16 +59,18 @@ class Collection extends \Pipeline\Standard implements Interfaces\Collection
 
     private function replace(callable $func)
     {
-        return $this->map(static::from($func, clone $this));
+        $this->pipeline->map(static::from($func, clone $this->pipeline)->pipeline);
+
+        return $this;
     }
 
     public function aggregate($seed, callable $func, callable $resultSelector = null)
     {
         if ($resultSelector) {
-            return $resultSelector($this->reduce($func, $seed));
+            return $resultSelector($this->pipeline->reduce($func, $seed));
         }
 
-        return $this->reduce($func, $seed);
+        return $this->pipeline->reduce($func, $seed);
     }
 
     public function all(callable $predicate = null): bool
@@ -60,7 +79,7 @@ class Collection extends \Pipeline\Standard implements Interfaces\Collection
             return $this->allTrue();
         }
 
-        foreach ($this as $value) {
+        foreach ($this->pipeline as $value) {
             if (!$predicate($value)) {
                 return false;
             }
@@ -71,7 +90,7 @@ class Collection extends \Pipeline\Standard implements Interfaces\Collection
 
     private function allTrue()
     {
-        foreach ($this as $value) {
+        foreach ($this->pipeline as $value) {
             if (!$value) {
                 return false;
             }
@@ -83,7 +102,7 @@ class Collection extends \Pipeline\Standard implements Interfaces\Collection
     public function any(callable $predicate = null): bool
     {
         if ($predicate) {
-            $this->filter($predicate);
+            $this->pipeline->filter($predicate);
         }
 
         /*
@@ -92,7 +111,7 @@ class Collection extends \Pipeline\Standard implements Interfaces\Collection
          * $this->getIterator()->rewind();
          * return $this->getIterator()->valid();
          */
-        foreach ($this as $value) {
+        foreach ($this->pipeline as $value) {
             return true;
         }
 
@@ -103,19 +122,21 @@ class Collection extends \Pipeline\Standard implements Interfaces\Collection
     {
         // `yield from` is about four times faster than \AppendIterator
         // and about 50% faster than `foreach-yield`
-        return $this->replace(static function ($previous) use ($element) {
+        $this->replace(static function ($previous) use ($element) {
             yield from $previous;
             yield $element;
         });
+
+        return $this;
     }
 
     public function average(callable $selector = null)
     {
         if ($selector) {
-            $this->map($selector);
+            $this->pipeline->map($selector);
         }
 
-        $result = $this->reduce(static function ($carry, $value) {
+        $result = $this->pipeline->reduce(static function ($carry, $value) {
             $carry->sum += $value;
             $carry->count += 1;
 
@@ -127,19 +148,23 @@ class Collection extends \Pipeline\Standard implements Interfaces\Collection
 
     public function cast($type)
     {
-        return $this->map(static function ($value) use ($type) {
+        $this->pipeline->map(static function ($value) use ($type) {
             if (settype($value, $type)) {
                 yield $value;
             }
         });
+
+        return $this;
     }
 
     public function concat($second)
     {
-        return $this->replace(static function ($previous) use ($second) {
+        $this->replace(static function ($previous) use ($second) {
             yield from $previous;
             yield from $second;
         });
+
+        return $this;
     }
 
     public function contains($value, callable $comparer = null)
@@ -148,7 +173,7 @@ class Collection extends \Pipeline\Standard implements Interfaces\Collection
             return $this->containsAny($value);
         }
 
-        foreach ($this as $sample) {
+        foreach ($this->pipeline as $sample) {
             if ($comparer($sample, $value)) {
                 return true;
             }
@@ -160,7 +185,7 @@ class Collection extends \Pipeline\Standard implements Interfaces\Collection
     private function containsAny($value)
     {
         // We could refactor this with a `map()` call, but that's an extra function call for each iteration.
-        foreach ($this as $sample) {
+        foreach ($this->pipeline as $sample) {
             if ($sample == $value) {
                 return true;
             }
@@ -172,15 +197,16 @@ class Collection extends \Pipeline\Standard implements Interfaces\Collection
     public function count(callable $predicate = null)
     {
         if ($predicate) {
-            $this->map($predicate)->filter();
+            $this->pipeline->map($predicate);
+            $this->pipeline->filter();
         }
 
-        return \iterator_count($this);
+        return \iterator_count($this->pipeline);
     }
 
     public function distinct(callable $comparer = null)
     {
-        return $this->map(static function ($value) use ($comparer) {
+        $this->pipeline->map(static function ($value) use ($comparer) {
             static $previous;
             static $previousSeen = false;
 
@@ -195,6 +221,8 @@ class Collection extends \Pipeline\Standard implements Interfaces\Collection
                 yield $value;
             }
         });
+
+        return $this;
     }
 
     public static function empty()
@@ -251,13 +279,23 @@ class Collection extends \Pipeline\Standard implements Interfaces\Collection
         })->distinct();
     }
 
+    /**
+     * @see Collection::where()
+     */
+    public function filter(callable $func = null)
+    {
+        $this->pipeline->filter($func);
+
+        return $this;
+    }
+
     public function first(callable $predicate = null)
     {
         if ($predicate) {
-            $this->filter($predicate);
+            $this->pipeline->filter($predicate);
         }
 
-        foreach ($this as $value) {
+        foreach ($this->pipeline as $value) {
             return $value;
         }
     }
@@ -265,29 +303,39 @@ class Collection extends \Pipeline\Standard implements Interfaces\Collection
     public function last(callable $predicate = null)
     {
         if ($predicate) {
-            $this->filter($predicate);
+            $this->pipeline->filter($predicate);
         }
 
         $value = null;
 
-        foreach ($this as $value) {
-            // Not casting to an array here to save memory and some cycles
+        foreach ($this->pipeline as $value) {
+            // Not casting to an array because we're lazy
         }
 
         return $value;
     }
 
+    /**
+     * @see Collection::select()
+     */
+    public function map(callable $func)
+    {
+        $this->pipeline->map($func);
+
+        return $this;
+    }
+
     public function max(callable $selector = null)
     {
         if ($selector) {
-            $this->map($selector);
+            $this->pipeline->map($selector);
         }
 
         $max = null; // everything is greater than null
 
         // We can load all values and be done with max(...$this),
         // but all values could take more memory than we have
-        foreach ($this as $value) {
+        foreach ($this->pipeline as $value) {
             if ($value > $max) {
                 $max = $value;
             }
@@ -299,19 +347,19 @@ class Collection extends \Pipeline\Standard implements Interfaces\Collection
     public function min(callable $selector = null)
     {
         if ($selector) {
-            $this->map($selector);
+            $this->pipeline->map($selector);
         }
 
         $min = null;
 
         // We can load all values and be done with min(...$this),
         // but all values could take more memory than we have
-        foreach ($this as $value) {
+        foreach ($this->pipeline as $value) {
             $min = $value;
             break;
         }
 
-        foreach ($this as $value) {
+        foreach ($this->pipeline as $value) {
             if ($value < $min) {
                 $min = $value;
             }
@@ -322,16 +370,20 @@ class Collection extends \Pipeline\Standard implements Interfaces\Collection
 
     public function ofType($type)
     {
-        return $this->filter(static function ($value) use ($type) {
+        $this->pipeline->filter(static function ($value) use ($type) {
             return gettype($value) == $type;
         });
+
+        return $this;
     }
 
     public function ofClass($className)
     {
-        return $this->filter(static function ($value) use ($className) {
+        $this->pipeline->filter(static function ($value) use ($className) {
             return is_object($value) && get_class($value) == $className;
         });
+
+        return $this;
     }
 
     public function prepend($element)
@@ -381,28 +433,42 @@ class Collection extends \Pipeline\Standard implements Interfaces\Collection
 
     public function select(callable $selector)
     {
-        return $this->map($selector);
+        $this->pipeline->map($selector);
+
+        return $this;
     }
 
     public function selectMany(callable $selector = null)
     {
         if ($selector) {
-            $this->map($selector);
+            $this->pipeline->map($selector);
         }
 
-        return $this->unpack();
+        $this->pipeline->unpack();
+
+        return $this;
+    }
+
+    /**
+     * @see Collection::selectMany()
+     */
+    public function unpack(callable $func = null)
+    {
+        $this->pipeline->unpack($func);
+
+        return $this;
     }
 
     public function single(callable $predicate = null)
     {
         if ($predicate) {
-            $this->filter($predicate);
+            $this->pipeline->filter($predicate);
         }
 
         $found = false;
         $foundValue = null;
 
-        foreach ($this as $value) {
+        foreach ($this->pipeline as $value) {
             if ($found) {
                 throw new InvalidOperationException();
             }
@@ -416,17 +482,19 @@ class Collection extends \Pipeline\Standard implements Interfaces\Collection
 
     public function skip(int $count)
     {
-        return $this->filter(static function () use ($count) {
+        $this->pipeline->filter(static function () use ($count) {
             static $skipped = 0;
             $skipped += 1;
 
             return $skipped > $count;
         });
+
+        return $this;
     }
 
     public function skipWhile(callable $predicate)
     {
-        return $this->filter(static function ($value) use ($predicate) {
+        $this->pipeline->filter(static function ($value) use ($predicate) {
             static $bypass = true;
 
             if (!$bypass) {
@@ -439,15 +507,27 @@ class Collection extends \Pipeline\Standard implements Interfaces\Collection
 
             return false;
         });
+
+        return $this;
     }
 
     public function sum(callable $selector = null)
     {
         if ($selector) {
-            $this->map($selector);
+            $this->pipeline->map($selector);
         }
 
-        return $this->reduce();
+        return $this->pipeline->reduce();
+    }
+
+    /**
+     * @see Collection::aggregate()
+     *
+     * @param null|mixed $initial
+     */
+    public function reduce(callable $func = null, $initial = null)
+    {
+        return $this->pipeline->reduce($func, $initial);
     }
 
     public function take(int $count)
@@ -478,9 +558,16 @@ class Collection extends \Pipeline\Standard implements Interfaces\Collection
         });
     }
 
+    public function toArray(): array
+    {
+        return $this->pipeline->toArray();
+    }
+
     public function where(callable $predicate)
     {
-        return $this->filter($predicate);
+        $this->pipeline->filter($predicate);
+
+        return $this;
     }
 
     public function zip($collection, callable $resultSelector = null)
@@ -491,7 +578,7 @@ class Collection extends \Pipeline\Standard implements Interfaces\Collection
             $collection instanceof \IteratorAggregate
             ? $collection->getIterator()
             : static::from($collection)->getIterator()
-            );
+        );
 
         $this->replace(static function ($previous) use ($collection) {
             foreach ($previous as $firstValue) {
@@ -508,7 +595,7 @@ class Collection extends \Pipeline\Standard implements Interfaces\Collection
         });
 
         if ($resultSelector) {
-            $this->unpack($resultSelector);
+            $this->pipeline->unpack($resultSelector);
         }
 
         return $this;
@@ -517,5 +604,15 @@ class Collection extends \Pipeline\Standard implements Interfaces\Collection
     public function jsonSerialize()
     {
         return $this->toArray();
+    }
+
+    public function getIterator(): \Traversable
+    {
+        return $this->pipeline->getIterator();
+    }
+
+    public function __invoke()
+    {
+        yield from $this->pipeline;
     }
 }

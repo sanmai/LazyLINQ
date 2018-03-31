@@ -48,4 +48,9 @@ final class ProxyUnchain implements \IteratorAggregate, \JsonSerializable
     {
         return $this->target->jsonSerialize();
     }
+
+    public function __invoke()
+    {
+        return $this->target->__invoke();
+    }
 }

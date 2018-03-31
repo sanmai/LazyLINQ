@@ -22,7 +22,7 @@ namespace LazyLINQ\Interfaces;
 /**
  * A partial lazy-only port of LINQ for PHP.
  */
-interface Collection extends \JsonSerializable
+interface Collection extends \JsonSerializable, \IteratorAggregate
 {
     /**
      * Constructs a new sequence using supplied elements, be it an array or an iterator.

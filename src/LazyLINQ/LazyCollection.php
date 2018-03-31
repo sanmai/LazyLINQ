@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace LazyLINQ;
 
-class LazyCollection extends Collection
+class LazyCollection extends Collection implements Interfaces\Collection
 {
     /**
      * @var Collection
@@ -51,6 +51,11 @@ class LazyCollection extends Collection
         return $this->collection;
     }
 
+    /**
+     * @deprecated will be removed in the next major version
+     *
+     * @param ?\Traversable $input
+     */
     public function __construct(\Traversable $input = null)
     {
         $this->collection = new parent($input);
@@ -206,14 +211,14 @@ class LazyCollection extends Collection
         return $this->immediate()->first($predicate);
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         return $this->immediate()->toArray();
     }
 
     public function map(callable $func)
     {
-        return $this->defer(__FUNCTION__, $func);
+        return $this->select($func);
     }
 
     public function unpack(callable $func = null)
@@ -231,7 +236,7 @@ class LazyCollection extends Collection
         return $this->defer(__FUNCTION__, $func);
     }
 
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         return $this->immediate()->getIterator();
     }

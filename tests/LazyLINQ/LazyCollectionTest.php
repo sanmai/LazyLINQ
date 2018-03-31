@@ -76,35 +76,6 @@ class LazyCollectionTest extends TestCase
         return LINQ::repeat(...$args);
     }
 
-    /**
-     * @covers \LazyLINQ\LazyCollection::unpack
-     */
-    public function testUnpack()
-    {
-        $this->assertEquals((10 * 11) / 2, static::from([
-            [1],
-            [2, 3],
-            [4, 5, 6],
-            [7, 8, 9, 10],
-        ])->unpack()->sum());
-    }
-
-    /**
-     * @covers \LazyLINQ\LazyCollection::unpack
-     */
-    public function testReduce()
-    {
-        $this->assertEquals(55, static::range(1, 10)->reduce());
-    }
-
-    /**
-     * @covers \LazyLINQ\LazyCollection::__invoke
-     */
-    public function testInvoke()
-    {
-        $this->assertEquals(15, static::from(static::range(1, 5)())->reduce());
-    }
-
     public function testAllMethodsDefined()
     {
         $reflection = new \ReflectionClass(static::newInstance());
