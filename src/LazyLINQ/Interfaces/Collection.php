@@ -305,6 +305,13 @@ interface Collection extends \JsonSerializable
     public function takeWhile(callable $predicate);
 
     /**
+     * Creates an array with all values from a pipeline.
+     *
+     * @return array
+     */
+    public function toArray(): array;
+
+    /**
      * Filters a sequence of values based on a predicate.
      *
      * @param callable $predicate a function to test each element for a condition
