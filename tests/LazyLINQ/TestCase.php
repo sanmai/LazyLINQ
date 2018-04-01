@@ -554,6 +554,8 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
             return "$digit is $label";
         })->toArray());
 
+        $this->assertSame([[1, 2]], static::from([1])->zip(static::from([2]))->toArray());
+
         $this->assertSame(3, static::from([1])->zip(static::from([2]))->selectMany()->sum());
     }
 
@@ -563,6 +565,16 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
     public function testJSON()
     {
         $this->assertSame('[1,2,3]', json_encode(static::from([1, 2, 3])));
+    }
+
+    /**
+     * @covers \LazyLINQ\Collection::getIterator
+     */
+    public function testGetIterator()
+    {
+        $this->assertInstanceOf(\IteratorAggregate::class, static::from([]));
+        $this->assertInstanceOf(\Traversable::class, static::from([1, 2, 3])->getIterator());
+        $this->assertInstanceOf(\Traversable::class, static::from(static::from([1, 2, 3]))->getIterator());
     }
 
     /**
@@ -635,5 +647,48 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $this->expectException(\Exception::class);
 
         $collection->any();
+    }
+
+    /**
+     * @covers \LazyLINQ\LazyCollection::unpack
+     * @covers \LazyLINQ\Collection::unpack
+     */
+    public function testUnpack()
+    {
+        $this->assertEquals((10 * 11) / 2, static::from([
+                [1],
+                [2, 3],
+                [4, 5, 6],
+                [7, 8, 9, 10],
+        ])->unpack()->sum());
+    }
+
+    /**
+     * @covers \LazyLINQ\LazyCollection::reduce
+     * @covers \LazyLINQ\Collection::reduce
+     */
+    public function testReduce()
+    {
+        $this->assertEquals(55, static::range(1, 10)->reduce());
+    }
+
+    /**
+     * @covers \LazyLINQ\LazyCollection::filter
+     * @covers \LazyLINQ\Collection::filter
+     */
+    public function testFilter()
+    {
+        $this->assertEquals([1, 1], static::from([0, 1, 1, 0])->filter()->toArray());
+    }
+
+    /**
+     * @covers \LazyLINQ\LazyCollection::__invoke
+     */
+    public function testInvoke()
+    {
+        $subject = static::range(1, 5);
+
+        $this->assertTrue(is_callable($subject), sprintf('Not callable: %s', get_class($subject)));
+        $this->assertEquals(15, static::from($subject())->reduce());
     }
 }

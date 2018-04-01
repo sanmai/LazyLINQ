@@ -22,7 +22,7 @@ namespace LazyLINQ\Interfaces;
 /**
  * A partial lazy-only port of LINQ for PHP.
  */
-interface Collection extends \JsonSerializable
+interface Collection extends \JsonSerializable, \IteratorAggregate
 {
     /**
      * Constructs a new sequence using supplied elements, be it an array or an iterator.
@@ -303,6 +303,13 @@ interface Collection extends \JsonSerializable
      * @return $this
      */
     public function takeWhile(callable $predicate);
+
+    /**
+     * Creates an array with all values from a pipeline.
+     *
+     * @return array
+     */
+    public function toArray(): array;
 
     /**
      * Filters a sequence of values based on a predicate.
