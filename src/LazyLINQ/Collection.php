@@ -33,7 +33,7 @@ class Collection implements Interfaces\Collection
      *
      * @param \Traversable|null $input
      *
-     * @deprecated
+     * @private
      */
     public function __construct(\Traversable $input = null)
     {
