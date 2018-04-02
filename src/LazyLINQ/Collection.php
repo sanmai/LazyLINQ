@@ -59,7 +59,7 @@ class Collection implements Interfaces\Collection
 
     private function replace(callable $func)
     {
-        $this->pipeline->map(static::from($func, clone $this->pipeline)->pipeline);
+        $this->pipeline = new \Pipeline\Standard($func($this->pipeline));
 
         return $this;
     }
