@@ -557,6 +557,18 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $this->assertSame([[1, 2]], static::from([1])->zip(static::from([2]))->toArray());
 
         $this->assertSame(3, static::from([1])->zip(static::from([2]))->selectMany()->sum());
+
+        $this->assertSame([
+            [1, 1],
+            [1, 2],
+            [1, 3],
+        ], static::from([1, 1, 1, 1])->zip(static::from([1, 2, 3]))->toArray());
+
+        $this->assertSame([
+            [1, 1],
+            [1, 2],
+            [1, 3],
+        ], static::from([1, 1, 1, 1])->zip(static::from(static::from([1, 2, 3])))->toArray());
     }
 
     /**
