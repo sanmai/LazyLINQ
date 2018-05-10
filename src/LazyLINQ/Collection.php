@@ -582,6 +582,8 @@ class Collection implements Interfaces\Collection
         // NoRewindIterator needs a plain Iterator
         if (!$iterator instanceof \Iterator) {
             $iterator = new \IteratorIterator($iterator);
+            // For some reason IteratorIterator needs to be rewinded
+            $iterator->rewind();
         }
 
         $collection = new \NoRewindIterator($iterator);
