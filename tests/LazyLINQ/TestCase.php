@@ -69,6 +69,8 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
     public function testFrom()
     {
         $this->assertSame([1, 2, 3], static::from([1, 2, 3])->toArray());
+        $this->assertSame([1, 2, 3], static::from(static::from([1, 2, 3]))->toArray());
+
         $this->assertSame([4, 5, 6], static::from(new \ArrayIterator([4, 5, 6]))->toArray());
         $this->assertSame([7, 8, 9], static::from(function () {
             yield 7;
