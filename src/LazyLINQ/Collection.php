@@ -574,11 +574,19 @@ class Collection implements Interfaces\Collection
     {
         // Collection must be non-rewindable. A generator can't be used here.
         // \NoRewindIterator needs \Iterator, not \IteratorAggregate
-        $collection = new \NoRewindIterator(
-            $collection instanceof \IteratorAggregate
+
+        $iterator = $collection instanceof \IteratorAggregate
             ? $collection->getIterator()
-            : static::from($collection)->getIterator()
-        );
+            : static::from($collection)->getIterator();
+
+        // NoRewindIterator needs a plain Iterator
+        if (!$iterator instanceof \Iterator) {
+            $iterator = new \IteratorIterator($iterator);
+            // For some reason IteratorIterator needs to be rewinded
+            $iterator->rewind();
+        }
+
+        $collection = new \NoRewindIterator($iterator);
 
         $this->replace(static function ($previous) use ($collection) {
             foreach ($previous as $firstValue) {
