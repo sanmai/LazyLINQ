@@ -202,6 +202,55 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
     }
 
     /**
+     * @covers \LazyLINQ\Collection::elementAt
+     */
+    public function testElementAt()
+    {
+        $this->assertSame(1, static::from([1, 2, 3])->elementAt(0));
+        $this->assertSame(2, static::from([1, 2, 3])->elementAt(1));
+        $this->assertSame(3, static::from([1, 2, 3])->elementAt(2));
+    }
+
+    /**
+     * @covers \LazyLINQ\Collection::elementAt
+     */
+    public function testElementAtNegativeIndex()
+    {
+        $this->expectException(\LazyLINQ\Errors\ArgumentOutOfRangeException::class);
+        static::from([1, 2, 3])->elementAt(-1);
+    }
+
+    /**
+     * @covers \LazyLINQ\Collection::elementAt
+     */
+    public function testElementAtOutOfBounds()
+    {
+        $this->expectException(\LazyLINQ\Errors\ArgumentOutOfRangeException::class);
+        static::from([1, 2, 3])->elementAt(3);
+    }
+
+    /**
+     * @covers \LazyLINQ\Collection::elementAt
+     */
+    public function testElementAtEmptyCollection()
+    {
+        $this->expectException(\LazyLINQ\Errors\ArgumentNullException::class);
+        static::empty()->elementAt(0);
+    }
+
+    /**
+     * @covers \LazyLINQ\Collection::elementAtOrDefault
+     */
+    public function testElementAtOrDefault()
+    {
+        $this->assertSame(null, static::from([1, 2, 3])->elementAtOrDefault(-1));
+        $this->assertSame(1, static::from([1, 2, 3])->elementAtOrDefault(0));
+        $this->assertSame(2, static::from([1, 2, 3])->elementAtOrDefault(1));
+        $this->assertSame(3, static::from([1, 2, 3])->elementAtOrDefault(2));
+        $this->assertSame(null, static::from([1, 2, 3])->elementAtOrDefault(3));
+    }
+
+    /**
      * @covers \LazyLINQ\Collection::empty
      */
     public function testEmpty()

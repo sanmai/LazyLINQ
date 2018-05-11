@@ -129,6 +129,29 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
     public function distinct(callable $comparer = null);
 
     /**
+     * Returns the element at a specified index in a sequence.
+     *
+     * @param int $index
+     *
+     * @throws \LazyLINQ\Errors\ArgumentNullException       if source is empty
+     * @throws \LazyLINQ\Errors\ArgumentOutOfRangeException if index is less than 0 or greater than or equal to the number of elements
+     *
+     * @return mixed
+     */
+    public function elementAt(int $index);
+
+    /**
+     * Returns the element at a specified index in a sequence, or a default value of null if an index is outside the bounds.
+     *
+     * @param int $index
+     *
+     * @throws \LazyLINQ\Errors\ArgumentNullException if source is empty
+     *
+     * @return mixed
+     */
+    public function elementAtOrDefault(int $index);
+
+    /**
      * Returns an empty collection.
      *
      * @return static

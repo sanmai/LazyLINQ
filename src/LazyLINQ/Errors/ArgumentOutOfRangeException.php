@@ -19,6 +19,6 @@ declare(strict_types=1);
 
 namespace LazyLINQ\Errors;
 
-class InvalidOperationException extends Exception
+class ArgumentOutOfRangeException extends Exception
 {
 }
