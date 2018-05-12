@@ -19,6 +19,8 @@ declare(strict_types=1);
 
 namespace LazyLINQ;
 
+use LazyLINQ\Errors\ArgumentNullException;
+use LazyLINQ\Errors\ArgumentOutOfRangeException;
 use LazyLINQ\Errors\InvalidOperationException;
 
 class Collection implements Interfaces\Collection
@@ -223,6 +225,49 @@ class Collection implements Interfaces\Collection
         });
 
         return $this;
+    }
+
+    public function elementAt(int $index)
+    {
+        $result = $this->elementAtIndex($index, $outOfBounds);
+
+        if ($outOfBounds) {
+            throw new ArgumentOutOfRangeException();
+        }
+
+        return $result;
+    }
+
+    public function elementAtOrDefault(int $index)
+    {
+        return $this->elementAtIndex($index, $outOfBounds);
+    }
+
+    private function elementAtIndex(int $index, &$outOfBounds)
+    {
+        if ($index < 0) {
+            $outOfBounds = true;
+
+            return null;
+        }
+
+        $currentIndex = 0;
+
+        foreach ($this->pipeline as $value) {
+            if ($currentIndex == $index) {
+                return $value;
+            }
+
+            $currentIndex += 1;
+        }
+
+        if (0 == $currentIndex) {
+            throw new ArgumentNullException();
+        }
+
+        $outOfBounds = true;
+
+        return null;
     }
 
     public static function empty()

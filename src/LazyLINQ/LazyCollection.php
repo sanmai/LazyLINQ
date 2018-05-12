@@ -86,6 +86,16 @@ class LazyCollection extends Collection implements Interfaces\Collection
         return $this->defer(__FUNCTION__, $comparer);
     }
 
+    public function elementAt(int $index)
+    {
+        return $this->immediate()->elementAt($index);
+    }
+
+    public function elementAtOrDefault(int $index)
+    {
+        return $this->immediate()->elementAtOrDefault($index);
+    }
+
     public function takeWhile(callable $predicate)
     {
         return $this->defer(__FUNCTION__, $predicate);
