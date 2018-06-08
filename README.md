@@ -30,8 +30,8 @@ Powered by generators, this library works in a lazy way: instead of doing comput
 | :heavy_check_mark:  | Count()               |                               |
 |                     | DefaultIfEmpty()      | Not applicable.               |
 | :heavy_check_mark:  | Distinct()            | Only removes repeated elements, think `uniq`. |
-| :heavy_check_mark:  | ElementAt()           | `@throws`                     |
-| :heavy_check_mark:  | ElementAtOrDefault()  | Always a null default value, `@throws` |
+| :heavy_check_mark:  | ElementAt()           | `@throws` :bomb:                     |
+| :heavy_check_mark:  | ElementAtOrDefault()  | Always a null default value, `@throws` :bomb: |
 | :heavy_check_mark:  | Empty()               | Returns a new empty collection. |
 | :heavy_check_mark:  | Except()              | Returns a new collection.     |
 | :heavy_check_mark:  | First()               |                               |
@@ -55,7 +55,7 @@ Powered by generators, this library works in a lazy way: instead of doing comput
 | :heavy_check_mark:  | Select()              |                               |
 | :heavy_check_mark:  | SelectMany()          |                               |
 |                     | SequenceEqual()       |                               |
-| :heavy_check_mark:  | Single()              | `@throws`                     |
+| :heavy_check_mark:  | Single()              | `@throws` :bomb:                    |
 |                     | SingleOrDefault()     |                               |
 | :heavy_check_mark:  | Skip()                |                               |
 | :heavy_check_mark:  | SkipWhile()           |                               |
@@ -80,5 +80,5 @@ For all inputs, keys are not exported nor used. If you absolutely need to access
 
 This library is built to last. Whatever you throw at it, it should just work.
 
-There are only few methods marked above that may throw an exception: .NET API requires that, so it was unavoidable. Other than that, you can expect only standard language errors to happen.
+There are only few methods marked with a :bomb: above that may throw an exception: .NET API requires that, so it was unavoidable. Other than that, you can expect only standard language errors to happen.
 
