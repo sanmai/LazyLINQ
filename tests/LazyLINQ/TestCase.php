@@ -30,35 +30,35 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * @param mixed ...$args
      *
-     * @return \Pipeline\Interfaces\Pipeline|\LazyLINQ\Interfaces\Collection
+     * @return \LazyLINQ\Collection
      */
     abstract public static function newInstance(...$args);
 
     /**
      * @param mixed ...$args
      *
-     * @return \Pipeline\Interfaces\Pipeline|\LazyLINQ\Interfaces\Collection
+     * @return \LazyLINQ\Collection
      */
     abstract public static function from(...$args);
 
     /**
      * @param mixed ...$args
      *
-     * @return \Pipeline\Interfaces\Pipeline|\LazyLINQ\Interfaces\Collection
+     * @return \LazyLINQ\Collection
      */
     abstract public static function empty(...$args);
 
     /**
      * @param mixed ...$args
      *
-     * @return \Pipeline\Interfaces\Pipeline|\LazyLINQ\Interfaces\Collection
+     * @return \LazyLINQ\Collection
      */
     abstract public static function range(...$args);
 
     /**
      * @param mixed ...$args
      *
-     * @return \Pipeline\Interfaces\Pipeline|\LazyLINQ\Interfaces\Collection
+     * @return \LazyLINQ\Collection
      */
     abstract public static function repeat(...$args);
 
