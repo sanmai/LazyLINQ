@@ -30,35 +30,35 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * @param mixed ...$args
      *
-     * @return \Pipeline\Interfaces\Pipeline|\LazyLINQ\Interfaces\Collection
+     * @return \LazyLINQ\Collection
      */
     abstract public static function newInstance(...$args);
 
     /**
      * @param mixed ...$args
      *
-     * @return \Pipeline\Interfaces\Pipeline|\LazyLINQ\Interfaces\Collection
+     * @return \LazyLINQ\Collection
      */
     abstract public static function from(...$args);
 
     /**
      * @param mixed ...$args
      *
-     * @return \Pipeline\Interfaces\Pipeline|\LazyLINQ\Interfaces\Collection
+     * @return \LazyLINQ\Collection
      */
     abstract public static function empty(...$args);
 
     /**
      * @param mixed ...$args
      *
-     * @return \Pipeline\Interfaces\Pipeline|\LazyLINQ\Interfaces\Collection
+     * @return \LazyLINQ\Collection
      */
     abstract public static function range(...$args);
 
     /**
      * @param mixed ...$args
      *
-     * @return \Pipeline\Interfaces\Pipeline|\LazyLINQ\Interfaces\Collection
+     * @return \LazyLINQ\Collection
      */
     abstract public static function repeat(...$args);
 
@@ -217,7 +217,20 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
     public function testElementAtNegativeIndex()
     {
         $this->expectException(\LazyLINQ\Errors\ArgumentOutOfRangeException::class);
-        static::from([1, 2, 3])->elementAt(-1);
+        static::from(function () {
+            yield 0;
+
+            $this->fail();
+        })->elementAt(-1);
+    }
+
+    /**
+     * @covers \LazyLINQ\Collection::elementAt
+     */
+    public function testElementAtLargeNegativeIndex()
+    {
+        $this->expectException(\LazyLINQ\Errors\ArgumentOutOfRangeException::class);
+        static::from([1, 2, 3])->elementAt(PHP_INT_MIN);
     }
 
     /**
