@@ -178,6 +178,11 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
     public function except($collection, callable $comparer = null, bool $strict = false): Collection;
 
     /**
+     * @see Collection::where()
+     */
+    public function filter(callable $func = null): Collection;
+
+    /**
      * Returns the first element in a sequence that satisfies an optional condition.
      *
      * @param ?callable $predicate a function to test each element for a condition
@@ -194,6 +199,13 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      * @return mixed|null
      */
     public function last(callable $predicate = null);
+
+    /**
+     * @see Collection::select()
+     *
+     * @param callable $func
+     */
+    public function map(callable $func): Collection;
 
     /**
      * Invokes an optional transform function on each element of a sequence and returns the maximum value.
