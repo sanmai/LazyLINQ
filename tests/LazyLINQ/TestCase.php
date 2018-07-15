@@ -321,6 +321,10 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         $this->assertSame([], static::from([$a1, $a2, $a3])->except([$a1])->toArray());
         $this->assertSame([$a2, $a3], static::from([$a1, $a2, $a3])->except([$a1], null, true)->toArray());
+
+        $this->assertSame([$a2, $a3], static::from([$a1, $a2, $a3])->except([$a1], function ($a, $b) {
+            return $a === $b;
+        }, true)->toArray());
     }
 
     /**

@@ -307,7 +307,7 @@ class Collection implements Interfaces\Collection
 
                 yield $value;
             }
-        })->distinct();
+        })->distinct(null, $strict);
     }
 
     private function exceptArray(array $collection, bool $strict)
