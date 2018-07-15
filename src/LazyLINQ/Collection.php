@@ -244,7 +244,7 @@ class Collection implements Interfaces\Collection
         $result = $this->elementAtIndex($index, $outOfBounds);
 
         if ($outOfBounds) {
-            throw new ArgumentOutOfRangeException();
+            throw new ArgumentOutOfRangeException('Specified index is out of range.');
         }
 
         return $result;
@@ -274,7 +274,7 @@ class Collection implements Interfaces\Collection
         }
 
         if (0 == $currentIndex) {
-            throw new ArgumentNullException();
+            throw new ArgumentNullException('Source is empty.');
         }
 
         $outOfBounds = true;
@@ -542,7 +542,7 @@ class Collection implements Interfaces\Collection
 
         foreach ($this->pipeline as $value) {
             if ($found) {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException('The collection does not contain exactly one element.');
             }
 
             $found = true;
