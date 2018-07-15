@@ -201,6 +201,11 @@ class LazyCollection extends Collection implements Interfaces\Collection
         return $this->immediate()->contains($value, $comparer);
     }
 
+    public function containsExactly($value): bool
+    {
+        return $this->immediate()->containsExactly($value);
+    }
+
     public function selectMany(callable $selector = null)
     {
         return $this->defer(__FUNCTION__, $selector);

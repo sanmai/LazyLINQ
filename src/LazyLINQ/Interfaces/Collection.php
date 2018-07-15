@@ -111,6 +111,15 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
     public function contains($value, callable $comparer = null);
 
     /**
+     * Determines whether the selected elements include exactly specified element by using an identity comparer. PHP-specific.
+     *
+     * @param mixed $value the value to locate in the sequence
+     *
+     * @return bool
+     */
+    public function containsExactly($value): bool;
+
+    /**
      * Returns a number that represents how many elements in the specified sequence satisfy an optional condition.
      *
      * @param ?callable $predicate an optional function to test each element for a condition

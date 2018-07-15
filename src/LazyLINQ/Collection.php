@@ -196,6 +196,17 @@ class Collection implements Interfaces\Collection
         return false;
     }
 
+    public function containsExactly($value): bool
+    {
+        foreach ($this->pipeline as $sample) {
+            if ($sample === $value) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function count(callable $predicate = null)
     {
         if ($predicate) {

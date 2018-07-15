@@ -177,6 +177,19 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $this->assertFalse(static::from(['test', 'testing'])->contains('foo', function ($a, $b) {
             return strlen($a) == strlen($b);
         }));
+
+        $this->assertTrue(static::from([1, 2, 4])->contains(2.0));
+        $this->assertTrue(static::from([0, M_PI])->contains(M_PI));
+    }
+
+    /**
+     * @covers \LazyLINQ\Collection::containsExactly
+     */
+    public function testContainsExactly()
+    {
+        $this->assertFalse(static::from([1, 2, 4])->containsExactly(2.0));
+        $this->assertTrue(static::from([1.0, 2.0, 4.0])->containsExactly(2.0));
+        $this->assertTrue(static::from([0, M_PI])->containsExactly(M_PI));
     }
 
     /**
