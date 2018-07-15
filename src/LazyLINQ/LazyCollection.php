@@ -71,17 +71,17 @@ class LazyCollection extends Collection implements Interfaces\Collection
         return $this->immediate()->average($selector);
     }
 
-    public function select(callable $selector)
+    public function select(callable $selector): Interfaces\Collection
     {
         return $this->defer(__FUNCTION__, $selector);
     }
 
-    public function prepend($element)
+    public function prepend($element): Interfaces\Collection
     {
         return $this->defer(__FUNCTION__, $element);
     }
 
-    public function distinct(callable $comparer = null, bool $strict = false)
+    public function distinct(callable $comparer = null, bool $strict = false): Interfaces\Collection
     {
         return $this->defer(__FUNCTION__, $comparer, $strict);
     }
@@ -96,12 +96,12 @@ class LazyCollection extends Collection implements Interfaces\Collection
         return $this->immediate()->elementAtOrDefault($index);
     }
 
-    public function takeWhile(callable $predicate)
+    public function takeWhile(callable $predicate): Interfaces\Collection
     {
         return $this->defer(__FUNCTION__, $predicate);
     }
 
-    public function skip(int $count)
+    public function skip(int $count): Interfaces\Collection
     {
         return $this->defer(__FUNCTION__, $count);
     }
@@ -116,12 +116,12 @@ class LazyCollection extends Collection implements Interfaces\Collection
         return $this->immediate()->aggregate($seed, $func, $resultSelector);
     }
 
-    public function cast($type)
+    public function cast($type): Interfaces\Collection
     {
         return $this->defer(__FUNCTION__, $type);
     }
 
-    public function skipWhile(callable $predicate)
+    public function skipWhile(callable $predicate): Interfaces\Collection
     {
         return $this->defer(__FUNCTION__, $predicate);
     }
@@ -136,12 +136,12 @@ class LazyCollection extends Collection implements Interfaces\Collection
         return $this->immediate()->min($selector);
     }
 
-    public function where(callable $predicate)
+    public function where(callable $predicate): Interfaces\Collection
     {
         return $this->defer(__FUNCTION__, $predicate);
     }
 
-    public function ofType(string $type)
+    public function ofType(string $type): Interfaces\Collection
     {
         return $this->defer(__FUNCTION__, $type);
     }
@@ -151,7 +151,7 @@ class LazyCollection extends Collection implements Interfaces\Collection
         return $this->immediate()->all($predicate);
     }
 
-    public function zip($collection, callable $resultSelector = null)
+    public function zip($collection, callable $resultSelector = null): Interfaces\Collection
     {
         return $this->defer(__FUNCTION__, $collection, $resultSelector);
     }
@@ -166,7 +166,7 @@ class LazyCollection extends Collection implements Interfaces\Collection
         return $this->immediate()->max($selector);
     }
 
-    public function ofClass(string $className)
+    public function ofClass(string $className): Interfaces\Collection
     {
         return $this->defer(__FUNCTION__, $className);
     }
@@ -176,7 +176,7 @@ class LazyCollection extends Collection implements Interfaces\Collection
         return $this->immediate()->count($predicate);
     }
 
-    public function concat($second)
+    public function concat($second): Interfaces\Collection
     {
         return $this->defer(__FUNCTION__, $second);
     }
@@ -191,7 +191,7 @@ class LazyCollection extends Collection implements Interfaces\Collection
         return $this->immediate()->single($predicate);
     }
 
-    public function take(int $count)
+    public function take(int $count): Interfaces\Collection
     {
         return $this->defer(__FUNCTION__, $count);
     }
@@ -206,17 +206,17 @@ class LazyCollection extends Collection implements Interfaces\Collection
         return $this->immediate()->containsExactly($value);
     }
 
-    public function selectMany(callable $selector = null)
+    public function selectMany(callable $selector = null): Interfaces\Collection
     {
         return $this->defer(__FUNCTION__, $selector);
     }
 
-    public function except($collection, callable $comparer = null, bool $strict = false)
+    public function except($collection, callable $comparer = null, bool $strict = false): Interfaces\Collection
     {
         return $this->defer(__FUNCTION__, $collection, $comparer, $strict);
     }
 
-    public function append($element)
+    public function append($element): Interfaces\Collection
     {
         return $this->defer(__FUNCTION__, $element);
     }
@@ -231,12 +231,12 @@ class LazyCollection extends Collection implements Interfaces\Collection
         return $this->immediate()->toArray();
     }
 
-    public function map(callable $func)
+    public function map(callable $func): Interfaces\Collection
     {
         return $this->select($func);
     }
 
-    public function unpack(callable $func = null)
+    public function unpack(callable $func = null): Interfaces\Collection
     {
         return $this->defer(__FUNCTION__, $func);
     }
@@ -246,7 +246,7 @@ class LazyCollection extends Collection implements Interfaces\Collection
         return $this->immediate()->reduce($func, $initial);
     }
 
-    public function filter(callable $func = null)
+    public function filter(callable $func = null): Interfaces\Collection
     {
         return $this->defer(__FUNCTION__, $func);
     }

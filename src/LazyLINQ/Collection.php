@@ -42,7 +42,7 @@ class Collection implements Interfaces\Collection
         $this->pipeline = new \Pipeline\Standard($input);
     }
 
-    public static function from($source, ...$args)
+    public static function from($source, ...$args): Interfaces\Collection
     {
         if (is_array($source)) {
             return new static(new \ArrayIterator($source));
@@ -59,7 +59,7 @@ class Collection implements Interfaces\Collection
         return new static(new \ArrayIterator([$source]));
     }
 
-    private function replace(callable $func)
+    private function replace(callable $func): Interfaces\Collection
     {
         $this->pipeline = new \Pipeline\Standard($func($this->pipeline));
 
@@ -90,7 +90,7 @@ class Collection implements Interfaces\Collection
         return true;
     }
 
-    private function allTrue()
+    private function allTrue(): bool
     {
         foreach ($this->pipeline as $value) {
             if (!$value) {
@@ -120,7 +120,7 @@ class Collection implements Interfaces\Collection
         return false;
     }
 
-    public function append($element)
+    public function append($element): Interfaces\Collection
     {
         // `yield from` is about four times faster than \AppendIterator
         // and about 50% faster than `foreach-yield`
@@ -148,7 +148,7 @@ class Collection implements Interfaces\Collection
         return $result->sum / $result->count;
     }
 
-    public function cast($type)
+    public function cast($type): Interfaces\Collection
     {
         $this->pipeline->map(static function ($value) use ($type) {
             if (settype($value, $type)) {
@@ -159,7 +159,7 @@ class Collection implements Interfaces\Collection
         return $this;
     }
 
-    public function concat($second)
+    public function concat($second): Interfaces\Collection
     {
         $this->replace(static function ($previous) use ($second) {
             yield from $previous;
@@ -217,7 +217,7 @@ class Collection implements Interfaces\Collection
         return \iterator_count($this->pipeline);
     }
 
-    public function distinct(callable $comparer = null, bool $strict = false)
+    public function distinct(callable $comparer = null, bool $strict = false): Interfaces\Collection
     {
         $this->pipeline->map(static function ($value) use ($comparer, $strict) {
             static $previous;
@@ -293,12 +293,12 @@ class Collection implements Interfaces\Collection
         return null;
     }
 
-    public static function empty()
+    public static function empty(): Interfaces\Collection
     {
         return static::from([]);
     }
 
-    public function except($collection, callable $comparer = null, bool $strict = false)
+    public function except($collection, callable $comparer = null, bool $strict = false): Interfaces\Collection
     {
         if (!$comparer && is_array($collection)) {
             return $this->exceptArray($collection, $strict);
@@ -321,7 +321,7 @@ class Collection implements Interfaces\Collection
         })->distinct(null, $strict);
     }
 
-    private function exceptArray(array $collection, bool $strict)
+    private function exceptArray(array $collection, bool $strict): Interfaces\Collection
     {
         return $this->replace(static function ($previous) use ($collection, $strict) {
             foreach ($previous as $value) {
@@ -332,7 +332,7 @@ class Collection implements Interfaces\Collection
         })->distinct(null, $strict);
     }
 
-    private function exceptEquals($collection)
+    private function exceptEquals($collection): Interfaces\Collection
     {
         return $this->replace(static function ($previous) use ($collection) {
             foreach ($previous as $value) {
@@ -347,7 +347,7 @@ class Collection implements Interfaces\Collection
         })->distinct();
     }
 
-    private function exceptIdentical($collection)
+    private function exceptIdentical($collection): Interfaces\Collection
     {
         return $this->replace(static function ($previous) use ($collection) {
             foreach ($previous as $value) {
@@ -365,7 +365,7 @@ class Collection implements Interfaces\Collection
     /**
      * @see Collection::where()
      */
-    public function filter(callable $func = null)
+    public function filter(callable $func = null): Interfaces\Collection
     {
         $this->pipeline->filter($func);
 
@@ -401,7 +401,7 @@ class Collection implements Interfaces\Collection
     /**
      * @see Collection::select()
      */
-    public function map(callable $func)
+    public function map(callable $func): Interfaces\Collection
     {
         $this->pipeline->map($func);
 
@@ -451,7 +451,7 @@ class Collection implements Interfaces\Collection
         return $min;
     }
 
-    public function ofType(string $type)
+    public function ofType(string $type): Interfaces\Collection
     {
         $this->pipeline->filter(static function ($value) use ($type) {
             return gettype($value) == $type;
@@ -460,7 +460,7 @@ class Collection implements Interfaces\Collection
         return $this;
     }
 
-    public function ofClass(string $className)
+    public function ofClass(string $className): Interfaces\Collection
     {
         $this->pipeline->filter(static function ($value) use ($className) {
             return $value instanceof $className;
@@ -469,7 +469,7 @@ class Collection implements Interfaces\Collection
         return $this;
     }
 
-    public function prepend($element)
+    public function prepend($element): Interfaces\Collection
     {
         return $this->replace(static function ($previous) use ($element) {
             yield $element;
@@ -484,7 +484,7 @@ class Collection implements Interfaces\Collection
      */
     const LAZY_RANGE_MIN_COUNT = 101;
 
-    public static function range(int $start, int $count)
+    public static function range(int $start, int $count): Interfaces\Collection
     {
         /*
          * Typical memory usage is the following:
@@ -505,7 +505,7 @@ class Collection implements Interfaces\Collection
         });
     }
 
-    public static function repeat($element, int $count)
+    public static function repeat($element, int $count): Interfaces\Collection
     {
         return static::from(static function () use ($element, $count) {
             do {
@@ -514,14 +514,14 @@ class Collection implements Interfaces\Collection
         });
     }
 
-    public function select(callable $selector)
+    public function select(callable $selector): Interfaces\Collection
     {
         $this->pipeline->map($selector);
 
         return $this;
     }
 
-    public function selectMany(callable $selector = null)
+    public function selectMany(callable $selector = null): Interfaces\Collection
     {
         if ($selector) {
             $this->pipeline->map($selector);
@@ -535,7 +535,7 @@ class Collection implements Interfaces\Collection
     /**
      * @see Collection::selectMany()
      */
-    public function unpack(callable $func = null)
+    public function unpack(callable $func = null): Interfaces\Collection
     {
         $this->pipeline->unpack($func);
 
@@ -563,7 +563,7 @@ class Collection implements Interfaces\Collection
         return $foundValue;
     }
 
-    public function skip(int $count)
+    public function skip(int $count): Interfaces\Collection
     {
         $this->pipeline->filter(static function () use ($count) {
             static $skipped = 0;
@@ -575,7 +575,7 @@ class Collection implements Interfaces\Collection
         return $this;
     }
 
-    public function skipWhile(callable $predicate)
+    public function skipWhile(callable $predicate): Interfaces\Collection
     {
         $this->pipeline->filter(static function ($value) use ($predicate) {
             static $bypass = true;
@@ -613,7 +613,7 @@ class Collection implements Interfaces\Collection
         return $this->pipeline->reduce($func, $initial);
     }
 
-    public function take(int $count)
+    public function take(int $count): Interfaces\Collection
     {
         return $this->replace(static function ($previous) use ($count) {
             foreach ($previous as $value) {
@@ -628,7 +628,7 @@ class Collection implements Interfaces\Collection
         });
     }
 
-    public function takeWhile(callable $predicate)
+    public function takeWhile(callable $predicate): Interfaces\Collection
     {
         return $this->replace(static function ($previous) use ($predicate) {
             foreach ($previous as $value) {
@@ -646,14 +646,14 @@ class Collection implements Interfaces\Collection
         return $this->pipeline->toArray();
     }
 
-    public function where(callable $predicate)
+    public function where(callable $predicate): Interfaces\Collection
     {
         $this->pipeline->filter($predicate);
 
         return $this;
     }
 
-    public function zip($collection, callable $resultSelector = null)
+    public function zip($collection, callable $resultSelector = null): Interfaces\Collection
     {
         // Collection must be non-rewindable. A generator can't be used here.
         // \NoRewindIterator needs \Iterator, not \IteratorAggregate
