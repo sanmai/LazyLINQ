@@ -141,8 +141,8 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testAverage()
     {
-        $this->assertSame(8, static::from([4, 4, 8, 16])->average());
-        $this->assertSame(3, static::from(['foo', 'bar', 'baz'])->average('strlen'));
+        $this->assertSame(8.0, static::from([4, 4, 8, 16])->average());
+        $this->assertSame(3.0, static::from(['foo', 'bar', 'baz'])->average('strlen'));
     }
 
     /**

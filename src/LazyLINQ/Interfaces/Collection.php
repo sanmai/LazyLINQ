@@ -78,7 +78,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return float
      */
-    public function average(callable $selector = null);
+    public function average(callable $selector = null): float;
 
     /**
      * Casts the elements of a collection to the specified type. Unsuccessful casts are filtered out.
@@ -108,7 +108,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return bool
      */
-    public function contains($value, callable $comparer = null);
+    public function contains($value, callable $comparer = null): bool;
 
     /**
      * Determines whether the selected elements include exactly specified element by using an identity comparer. PHP-specific.
@@ -126,7 +126,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return int
      */
-    public function count(callable $predicate = null);
+    public function count(callable $predicate = null): int;
 
     /**
      * Removes repeated elements from a sequence.

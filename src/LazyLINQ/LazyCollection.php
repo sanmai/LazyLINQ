@@ -66,7 +66,7 @@ class LazyCollection extends Collection implements Interfaces\Collection
         parent::__construct(null);
     }
 
-    public function average(callable $selector = null)
+    public function average(callable $selector = null): float
     {
         return $this->immediate()->average($selector);
     }
@@ -171,7 +171,7 @@ class LazyCollection extends Collection implements Interfaces\Collection
         return $this->defer(__FUNCTION__, $className);
     }
 
-    public function count(callable $predicate = null)
+    public function count(callable $predicate = null): int
     {
         return $this->immediate()->count($predicate);
     }
@@ -196,7 +196,7 @@ class LazyCollection extends Collection implements Interfaces\Collection
         return $this->defer(__FUNCTION__, $count);
     }
 
-    public function contains($value, callable $comparer = null)
+    public function contains($value, callable $comparer = null): bool
     {
         return $this->immediate()->contains($value, $comparer);
     }

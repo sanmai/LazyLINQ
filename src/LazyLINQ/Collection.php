@@ -132,7 +132,7 @@ class Collection implements Interfaces\Collection
         return $this;
     }
 
-    public function average(callable $selector = null)
+    public function average(callable $selector = null): float
     {
         if ($selector) {
             $this->pipeline->map($selector);
@@ -169,7 +169,7 @@ class Collection implements Interfaces\Collection
         return $this;
     }
 
-    public function contains($value, callable $comparer = null)
+    public function contains($value, callable $comparer = null): bool
     {
         if (!$comparer) {
             return $this->containsAny($value);
@@ -207,7 +207,7 @@ class Collection implements Interfaces\Collection
         return false;
     }
 
-    public function count(callable $predicate = null)
+    public function count(callable $predicate = null): int
     {
         if ($predicate) {
             $this->pipeline->map($predicate);
