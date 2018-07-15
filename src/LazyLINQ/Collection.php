@@ -206,9 +206,9 @@ class Collection implements Interfaces\Collection
         return \iterator_count($this->pipeline);
     }
 
-    public function distinct(callable $comparer = null)
+    public function distinct(callable $comparer = null, bool $strict = false)
     {
-        $this->pipeline->map(static function ($value) use ($comparer) {
+        $this->pipeline->map(static function ($value) use ($comparer, $strict) {
             static $previous;
             static $previousSeen = false;
 
@@ -218,9 +218,21 @@ class Collection implements Interfaces\Collection
                 yield $value;
             }
 
-            if ($comparer ? !$comparer($value, $previous) : $value != $previous) {
-                $previous = $value;
-                yield $value;
+            if ($comparer) {
+                if (!$comparer($value, $previous)) {
+                    $previous = $value;
+                    yield $value;
+                }
+            } elseif (!$strict) {
+                if ($value != $previous) {
+                    $previous = $value;
+                    yield $value;
+                }
+            } else {
+                if ($value !== $previous) {
+                    $previous = $value;
+                    yield $value;
+                }
             }
         });
 
@@ -275,14 +287,14 @@ class Collection implements Interfaces\Collection
         return static::from([]);
     }
 
-    public function except($collection, callable $comparer = null)
+    public function except($collection, callable $comparer = null, bool $strict = false)
     {
         if (!$comparer && is_array($collection)) {
-            return $this->exceptArray($collection);
+            return $this->exceptArray($collection, $strict);
         }
 
         if (!$comparer) {
-            return $this->exceptEquals($collection);
+            return $strict ? $this->exceptIdentical($collection) : $this->exceptEquals($collection);
         }
 
         return $this->replace(static function ($previous) use ($collection, $comparer) {
@@ -298,15 +310,15 @@ class Collection implements Interfaces\Collection
         })->distinct();
     }
 
-    private function exceptArray(array $collection)
+    private function exceptArray(array $collection, bool $strict)
     {
-        return $this->replace(static function ($previous) use ($collection) {
+        return $this->replace(static function ($previous) use ($collection, $strict) {
             foreach ($previous as $value) {
-                if (!in_array($value, $collection)) {
+                if (!in_array($value, $collection, $strict)) {
                     yield $value;
                 }
             }
-        })->distinct();
+        })->distinct(null, $strict);
     }
 
     private function exceptEquals($collection)
@@ -322,6 +334,21 @@ class Collection implements Interfaces\Collection
                 yield $value;
             }
         })->distinct();
+    }
+
+    private function exceptIdentical($collection)
+    {
+        return $this->replace(static function ($previous) use ($collection) {
+            foreach ($previous as $value) {
+                foreach ($collection as $excluded) {
+                    if ($value === $excluded) {
+                        continue 2;
+                    }
+                }
+
+                yield $value;
+            }
+        })->distinct(null, true);
     }
 
     /**

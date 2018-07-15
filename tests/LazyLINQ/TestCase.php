@@ -199,6 +199,13 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $this->assertSame(['foo', 'test', 'foo'], static::from(['foo', 'bar', 'baz', 'test', 'foo', 'foo'])->distinct(function ($a, $b) {
             return strlen($a) == strlen($b);
         })->toArray());
+
+        $a1 = (object) ['foo' => 'a'];
+        $a2 = (object) ['foo' => 'a'];
+        $a3 = (object) ['foo' => 'a'];
+
+        $this->assertSame([$a1], static::from([$a1, $a2, $a3, $a1])->distinct()->toArray());
+        $this->assertSame([$a1, $a2, $a3], static::from([$a1, $a2, $a3, $a3])->distinct(null, true)->toArray());
     }
 
     /**
@@ -284,6 +291,8 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $this->assertEquals([2.0, 2.3, 2.4, 2.5], static::from([2.0, 2.0, 2.1, 2.2, 2.3, 2.3, 2.4, 2.5])->except([2.2, 2.1])->toArray());
 
         $this->assertEquals(1, static::from([1, 2, 1])->except([2, 3, 2])->single());
+
+        $this->assertEquals([1, 2], static::from([1, 2, 3])->except(['2', 3], null, true)->toArray());
     }
 
     /**
@@ -293,6 +302,25 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
     {
         $this->assertEquals(1, static::from([1, 2, 1])->except(static::from([2, 3, 2]))->single());
         $this->assertEquals('test', static::from(['test', 'foo', 'bar', 'baz'])->except(static::from(['foo', 'bar', 'baz']))->single());
+    }
+
+    /**
+     * @covers \LazyLINQ\Collection::exceptEquals
+     */
+    public function testExceptIdentical()
+    {
+        $this->assertEquals('b', static::from([(object) ['foo' => 'a'], (object) ['foo' => 'b']])->except(static::from([(object) ['foo' => 'a']]))->single()->foo);
+        $this->assertEquals('a', static::from([(object) ['foo' => 'a'], (object) ['foo' => 'b']])->except(static::from([(object) ['foo' => 'a']]), null, true)->first()->foo);
+
+        $a1 = (object) ['foo' => 'a'];
+        $a2 = (object) ['foo' => 'a'];
+        $a3 = (object) ['foo' => 'a'];
+
+        $this->assertSame([], static::from([$a1, $a2, $a3])->except(static::from([$a1]))->toArray());
+        $this->assertSame([$a2, $a3], static::from([$a1, $a2, $a3])->except(static::from([$a1]), null, true)->toArray());
+
+        $this->assertSame([], static::from([$a1, $a2, $a3])->except([$a1])->toArray());
+        $this->assertSame([$a2, $a3], static::from([$a1, $a2, $a3])->except([$a1], null, true)->toArray());
     }
 
     /**

@@ -126,7 +126,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return $this
      */
-    public function distinct(callable $comparer = null);
+    public function distinct(callable $comparer = null, bool $strict = false);
 
     /**
      * Returns the element at a specified index in a sequence.
@@ -166,7 +166,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return $this
      */
-    public function except($collection, callable $comparer = null);
+    public function except($collection, callable $comparer = null, bool $strict = false);
 
     /**
      * Returns the first element in a sequence that satisfies an optional condition.

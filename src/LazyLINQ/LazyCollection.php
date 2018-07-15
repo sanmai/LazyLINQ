@@ -81,9 +81,9 @@ class LazyCollection extends Collection implements Interfaces\Collection
         return $this->defer(__FUNCTION__, $element);
     }
 
-    public function distinct(callable $comparer = null)
+    public function distinct(callable $comparer = null, bool $strict = false)
     {
-        return $this->defer(__FUNCTION__, $comparer);
+        return $this->defer(__FUNCTION__, $comparer, $strict);
     }
 
     public function elementAt(int $index)
@@ -206,9 +206,9 @@ class LazyCollection extends Collection implements Interfaces\Collection
         return $this->defer(__FUNCTION__, $selector);
     }
 
-    public function except($collection, callable $comparer = null)
+    public function except($collection, callable $comparer = null, bool $strict = false)
     {
-        return $this->defer(__FUNCTION__, $collection, $comparer);
+        return $this->defer(__FUNCTION__, $collection, $comparer, $strict);
     }
 
     public function append($element)
