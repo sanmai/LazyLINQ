@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace LazyLINQ;
 
-class LazyCollection extends Collection implements Interfaces\Collection
+final class LazyCollection extends Collection implements Interfaces\Collection
 {
     /**
      * @var Collection
