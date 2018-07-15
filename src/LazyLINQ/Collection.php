@@ -440,7 +440,7 @@ class Collection implements Interfaces\Collection
         return $min;
     }
 
-    public function ofType($type)
+    public function ofType(string $type)
     {
         $this->pipeline->filter(static function ($value) use ($type) {
             return gettype($value) == $type;
@@ -449,10 +449,10 @@ class Collection implements Interfaces\Collection
         return $this;
     }
 
-    public function ofClass($className)
+    public function ofClass(string $className)
     {
         $this->pipeline->filter(static function ($value) use ($className) {
-            return is_object($value) && get_class($value) == $className;
+            return $value instanceof $className;
         });
 
         return $this;

@@ -213,7 +213,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return $this
      */
-    public function ofType($type);
+    public function ofType(string $type);
 
     /**
      * Filters the elements of a collection based on a specified class name. Non-object are filtered out.
@@ -224,7 +224,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return $this
      */
-    public function ofClass($className);
+    public function ofClass(string $className);
 
     /**
      * Adds a value to the beginning of the sequence.

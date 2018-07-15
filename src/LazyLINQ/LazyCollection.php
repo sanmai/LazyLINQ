@@ -141,7 +141,7 @@ class LazyCollection extends Collection implements Interfaces\Collection
         return $this->defer(__FUNCTION__, $predicate);
     }
 
-    public function ofType($type)
+    public function ofType(string $type)
     {
         return $this->defer(__FUNCTION__, $type);
     }
@@ -166,7 +166,7 @@ class LazyCollection extends Collection implements Interfaces\Collection
         return $this->immediate()->max($selector);
     }
 
-    public function ofClass($className)
+    public function ofClass(string $className)
     {
         return $this->defer(__FUNCTION__, $className);
     }
