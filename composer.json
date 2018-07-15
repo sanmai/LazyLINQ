@@ -30,7 +30,7 @@
     },
     "require": {
         "php": "^7.0",
-        "sanmai/pipeline": "^1.5"
+        "sanmai/pipeline": "^2.0"
     },
     "config": {
         "sort-packages": true
