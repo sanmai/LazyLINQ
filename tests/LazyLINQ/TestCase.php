@@ -208,6 +208,7 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
     {
         $this->assertSame([1, 2, 3, 4], static::from([1, 1, 2, 2, 3, 4, 4])->distinct()->toArray());
         $this->assertSame([1, 2, 3, 4, 1], static::from([1, 1, 2, 2, 3, 4, 1])->distinct()->toArray());
+        $this->assertSame([1, 2, 3, 4], static::from([1, 1.0, 2, 2.0, 3, 4, 4.0])->distinct()->toArray());
 
         $this->assertSame(['foo', 'test', 'foo'], static::from(['foo', 'bar', 'baz', 'test', 'foo', 'foo'])->distinct(function ($a, $b) {
             return strlen($a) == strlen($b);
@@ -302,6 +303,7 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
     {
         $this->assertEquals([2.0, 2.1, 2.3, 2.4, 2.5], static::from([2.0, 2.0, 2.1, 2.2, 2.3, 2.3, 2.4, 2.5])->except([2.2])->toArray());
         $this->assertEquals([2.0, 2.3, 2.4, 2.5], static::from([2.0, 2.0, 2.1, 2.2, 2.3, 2.3, 2.4, 2.5])->except([2.2, 2.1])->toArray());
+        $this->assertEquals([2.3, 2.4, 2.5], static::from([2.0, 2.0, 2.1, 2.2, 2.3, 2.3, 2.4, 2.5])->except([2.2, 2.1, 2])->toArray());
 
         $this->assertEquals(1, static::from([1, 2, 1])->except([2, 3, 2])->single());
 
