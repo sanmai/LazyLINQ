@@ -30,9 +30,14 @@
     },
     "require": {
         "php": "^7.0",
-        "sanmai/pipeline": "^1.5"
+        "sanmai/pipeline": "^2.0"
     },
     "config": {
         "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
     }
 }

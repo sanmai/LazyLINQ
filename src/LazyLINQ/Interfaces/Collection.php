@@ -31,7 +31,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return static
      */
-    public static function from($source, ...$args);
+    public static function from($source, ...$args): Collection;
 
     /**
      * Applies an accumulator function over a sequence.
@@ -69,7 +69,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return $this
      */
-    public function append($element);
+    public function append($element): Collection;
 
     /**
      * Computes the average of a sequence of values that are obtained by invoking an optional transform function on each element of the input sequence.
@@ -78,7 +78,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return float
      */
-    public function average(callable $selector = null);
+    public function average(callable $selector = null): float;
 
     /**
      * Casts the elements of a collection to the specified type. Unsuccessful casts are filtered out.
@@ -89,7 +89,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return $this
      */
-    public function cast($type); // TODO
+    public function cast($type): Collection;
 
     /**
      * Concatenates two sequences.
@@ -98,7 +98,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return $this
      */
-    public function concat($second);
+    public function concat($second): Collection;
 
     /**
      * Determines whether the selected elements include a specified element by using an optional equality comparer.
@@ -108,7 +108,16 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return bool
      */
-    public function contains($value, callable $comparer = null);
+    public function contains($value, callable $comparer = null): bool;
+
+    /**
+     * Determines whether the selected elements include exactly specified element by using an identity comparer. PHP-specific.
+     *
+     * @param mixed $value the value to locate in the sequence
+     *
+     * @return bool
+     */
+    public function containsExactly($value): bool;
 
     /**
      * Returns a number that represents how many elements in the specified sequence satisfy an optional condition.
@@ -117,7 +126,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return int
      */
-    public function count(callable $predicate = null);
+    public function count(callable $predicate = null): int;
 
     /**
      * Removes repeated elements from a sequence.
@@ -126,7 +135,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return $this
      */
-    public function distinct(callable $comparer = null);
+    public function distinct(callable $comparer = null, bool $strict = false): Collection;
 
     /**
      * Returns the element at a specified index in a sequence.
@@ -156,7 +165,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return static
      */
-    public static function empty();
+    public static function empty(): Collection;
 
     /**
      * Produces the set difference of two sequences by using the default equality comparer to compare values.
@@ -166,7 +175,12 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return $this
      */
-    public function except($collection, callable $comparer = null);
+    public function except($collection, callable $comparer = null, bool $strict = false): Collection;
+
+    /**
+     * @see Collection::where()
+     */
+    public function filter(callable $func = null): Collection;
 
     /**
      * Returns the first element in a sequence that satisfies an optional condition.
@@ -185,6 +199,13 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      * @return mixed|null
      */
     public function last(callable $predicate = null);
+
+    /**
+     * @see Collection::select()
+     *
+     * @param callable $func
+     */
+    public function map(callable $func): Collection;
 
     /**
      * Invokes an optional transform function on each element of a sequence and returns the maximum value.
@@ -213,7 +234,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return $this
      */
-    public function ofType($type);
+    public function ofType(string $type): Collection;
 
     /**
      * Filters the elements of a collection based on a specified class name. Non-object are filtered out.
@@ -224,7 +245,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return $this
      */
-    public function ofClass($className);
+    public function ofClass(string $className): Collection;
 
     /**
      * Adds a value to the beginning of the sequence.
@@ -233,7 +254,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return $this
      */
-    public function prepend($element);
+    public function prepend($element): Collection;
 
     /**
      * Generates a sequence of integral numbers within a specified range.
@@ -243,7 +264,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return static
      */
-    public static function range(int $start, int $count);
+    public static function range(int $start, int $count): Collection;
 
     /**
      * @param mixed $element the value to be repeated
@@ -251,7 +272,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return static
      */
-    public static function repeat($element, int $count);
+    public static function repeat($element, int $count): Collection;
 
     /**
      * Projects each element of a sequence into a new form.
@@ -260,7 +281,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return $this
      */
-    public function select(callable $selector);
+    public function select(callable $selector): Collection;
 
     /**
      * Projects each element of a sequence to another sequence and flattens the resulting sequences into one sequence.
@@ -269,7 +290,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return $this
      */
-    public function selectMany(callable $selector = null);
+    public function selectMany(callable $selector = null): Collection;
 
     /**
      * Returns the only element of a sequence that satisfies an optional condition, and throws an exception if more than one such element exists. Returns null for an empty collection.
@@ -289,7 +310,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return $this
      */
-    public function skip(int $count);
+    public function skip(int $count): Collection;
 
     /**
      * Bypasses elements in a sequence as long as a specified condition is true.
@@ -298,7 +319,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return $this
      */
-    public function skipWhile(callable $predicate);
+    public function skipWhile(callable $predicate): Collection;
 
     /**
      * Computes the sum of the sequence of values that are obtained by invoking an optional transform function on each element of the input sequence.
@@ -316,7 +337,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return $this
      */
-    public function take(int $count);
+    public function take(int $count): Collection;
 
     /**
      * Returns elements from a sequence as long as a specified condition is true.
@@ -325,7 +346,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return $this
      */
-    public function takeWhile(callable $predicate);
+    public function takeWhile(callable $predicate): Collection;
 
     /**
      * Creates an array with all values from a pipeline.
@@ -341,7 +362,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return $this
      */
-    public function where(callable $predicate);
+    public function where(callable $predicate): Collection;
 
     /**
      * Applies a specified function to the corresponding elements of two sequences, producing a sequence of the results.
@@ -352,7 +373,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @return $this
      */
-    public function zip(/* iterable */$collection, callable $resultSelector = null);
+    public function zip(/* iterable */$collection, callable $resultSelector = null): Collection;
 
     public function jsonSerialize();
 }
