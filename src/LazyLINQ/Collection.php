@@ -671,6 +671,7 @@ class Collection implements Interfaces\Collection
             $iterator->rewind();
         }
 
+        /** @psalm-suppress PossiblyInvalidArgument */
         $collection = new \NoRewindIterator($iterator);
 
         $this->replace(static function ($previous) use ($collection) {
