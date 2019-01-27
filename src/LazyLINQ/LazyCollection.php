@@ -62,8 +62,10 @@ final class LazyCollection extends Collection implements Interfaces\Collection
 
         $this->queue = [];
 
-        // Calling parent with a null so all direct calls to map() on it would fail
-        parent::__construct(null);
+        /*
+         * We do not call parent::__construct() here as we do not need anything from the parent.
+         * (Our relationship is a historic curiosity, no more. Will go away later.)
+         */
     }
 
     public function average(callable $selector = null): float
