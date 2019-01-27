@@ -608,7 +608,7 @@ class Collection implements Interfaces\Collection
     /**
      * @see Collection::aggregate()
      *
-     * @param null|mixed $initial
+     * @param mixed|null $initial
      */
     public function reduce(callable $func = null, $initial = null)
     {

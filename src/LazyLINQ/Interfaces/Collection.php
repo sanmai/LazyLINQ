@@ -367,9 +367,8 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
     /**
      * Applies a specified function to the corresponding elements of two sequences, producing a sequence of the results.
      *
-     * @param \Traversable|array $collection     a sequence to merge
-     * @param ?callable          $resultSelector a function that specifies how to merge the elements from the two sequences
-     * @param mixed              $collection
+     * @param \Traversable|array|iterable $collection     a sequence to merge
+     * @param ?callable                   $resultSelector a function that specifies how to merge the elements from the two sequences
      *
      * @return $this
      */
