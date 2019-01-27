@@ -52,7 +52,7 @@ final class LazyCollection extends Collection implements Interfaces\Collection
     }
 
     /**
-     * @deprecated will be removed in the next major version
+     * @deprecated will be removed (made private) in the next major version
      *
      * @param ?\Traversable $input
      */

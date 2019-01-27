@@ -36,6 +36,8 @@ class Collection implements Interfaces\Collection
      * @param \Traversable|null $input
      *
      * @private
+     *
+     * @deprecated will be removed (made private)
      */
     public function __construct(\Traversable $input = null)
     {
