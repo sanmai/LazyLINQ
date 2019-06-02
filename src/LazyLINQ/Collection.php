@@ -33,7 +33,7 @@ class Collection implements Interfaces\Collection
     /**
      * Contructor with a source of data. Not part of any interface, will be removed in future.
      *
-     * @param \Traversable|null $input
+     * @param null|\Traversable $input
      *
      * @private
      *
@@ -608,7 +608,7 @@ class Collection implements Interfaces\Collection
     /**
      * @see Collection::aggregate()
      *
-     * @param mixed|null $initial
+     * @param null|mixed $initial
      */
     public function reduce(callable $func = null, $initial = null)
     {

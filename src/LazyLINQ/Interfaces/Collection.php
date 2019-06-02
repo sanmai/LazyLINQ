@@ -27,7 +27,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
     /**
      * Constructs a new sequence using supplied elements, be it an array or an iterator.
      *
-     * @param array|\Traversable|mixed $source
+     * @param array|mixed|\Traversable $source
      *
      * @return static
      */
@@ -94,7 +94,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
     /**
      * Concatenates two sequences.
      *
-     * @param \Traversable|array $second the sequence to concatenate
+     * @param array|\Traversable $second the sequence to concatenate
      *
      * @return $this
      */
@@ -170,7 +170,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
     /**
      * Produces the set difference of two sequences by using the default equality comparer to compare values.
      *
-     * @param \Traversable|array $collection a reversible collection of values to exclude from
+     * @param array|\Traversable $collection a reversible collection of values to exclude from
      * @param ?callable          $comparer
      *
      * @return $this
@@ -187,7 +187,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @param ?callable $predicate a function to test each element for a condition
      *
-     * @return mixed|null
+     * @return null|mixed
      */
     public function first(callable $predicate = null);
 
@@ -196,7 +196,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @param ?callable $predicate a function to test each element for a condition
      *
-     * @return mixed|null
+     * @return null|mixed
      */
     public function last(callable $predicate = null);
 
@@ -212,7 +212,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @param ?callable $selector a transform function to apply to each element
      *
-     * @return int|float|null
+     * @return null|float|int
      */
     public function max(callable $selector = null);
 
@@ -221,7 +221,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @param ?callable $selector a transform function to apply to each element
      *
-     * @return int|float
+     * @return float|int
      */
     public function min(callable $selector = null);
 
@@ -299,7 +299,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @throws \LazyLINQ\Errors\InvalidOperationException
      *
-     * @return mixed|null
+     * @return null|mixed
      */
     public function single(callable $predicate = null);
 
@@ -326,7 +326,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @param ?callable $selector a transform function to apply to each element
      *
-     * @return int|float|null
+     * @return null|float|int
      */
     public function sum(callable $selector = null);
 
@@ -367,7 +367,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
     /**
      * Applies a specified function to the corresponding elements of two sequences, producing a sequence of the results.
      *
-     * @param \Traversable|array|iterable $collection     a sequence to merge
+     * @param array|iterable|\Traversable $collection     a sequence to merge
      * @param ?callable                   $resultSelector a function that specifies how to merge the elements from the two sequences
      *
      * @return $this

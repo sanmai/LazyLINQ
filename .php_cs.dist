@@ -37,6 +37,7 @@ return PhpCsFixer\Config::create()
         'standardize_increment' => false,
         'visibility_required' => true,
         'header_comment' => ['header' => $header, 'separate' => 'bottom', 'location' => 'after_open'],
+        'phpdoc_types_order' => true,
     ])
     ->setFinder(
         PhpCsFixer\Finder::create()
