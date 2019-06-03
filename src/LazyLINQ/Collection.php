@@ -33,9 +33,11 @@ class Collection implements Interfaces\Collection
     /**
      * Contructor with a source of data. Not part of any interface, will be removed in future.
      *
-     * @param \Traversable|null $input
+     * @param null|\Traversable $input
      *
      * @private
+     *
+     * @deprecated will be removed (made private)
      */
     public function __construct(\Traversable $input = null)
     {
@@ -669,6 +671,7 @@ class Collection implements Interfaces\Collection
             $iterator->rewind();
         }
 
+        /** @psalm-suppress PossiblyInvalidArgument */
         $collection = new \NoRewindIterator($iterator);
 
         $this->replace(static function ($previous) use ($collection) {

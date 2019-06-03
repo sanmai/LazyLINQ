@@ -27,7 +27,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
     /**
      * Constructs a new sequence using supplied elements, be it an array or an iterator.
      *
-     * @param array|\Traversable|mixed $source
+     * @param array|mixed|\Traversable $source
      *
      * @return static
      */
@@ -67,7 +67,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @param mixed $element the value to append
      *
-     * @return $this
+     * @return $this|Collection
      */
     public function append($element): Collection;
 
@@ -87,16 +87,16 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @see settype()
      *
-     * @return $this
+     * @return $this|Collection
      */
     public function cast($type): Collection;
 
     /**
      * Concatenates two sequences.
      *
-     * @param \Traversable|array $second the sequence to concatenate
+     * @param array|\Traversable $second the sequence to concatenate
      *
-     * @return $this
+     * @return $this|Collection
      */
     public function concat($second): Collection;
 
@@ -133,7 +133,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @param ?callable $comparer An optional equality comparer to compare values. Should return true if values are equal.
      *
-     * @return $this
+     * @return $this|Collection
      */
     public function distinct(callable $comparer = null, bool $strict = false): Collection;
 
@@ -170,10 +170,10 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
     /**
      * Produces the set difference of two sequences by using the default equality comparer to compare values.
      *
-     * @param \Traversable|array $collection a reversible collection of values to exclude from
+     * @param array|\Traversable $collection a reversible collection of values to exclude from
      * @param ?callable          $comparer
      *
-     * @return $this
+     * @return $this|Collection
      */
     public function except($collection, callable $comparer = null, bool $strict = false): Collection;
 
@@ -187,7 +187,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @param ?callable $predicate a function to test each element for a condition
      *
-     * @return mixed|null
+     * @return null|mixed
      */
     public function first(callable $predicate = null);
 
@@ -196,7 +196,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @param ?callable $predicate a function to test each element for a condition
      *
-     * @return mixed|null
+     * @return null|mixed
      */
     public function last(callable $predicate = null);
 
@@ -212,7 +212,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @param ?callable $selector a transform function to apply to each element
      *
-     * @return int|float|null
+     * @return null|float|int
      */
     public function max(callable $selector = null);
 
@@ -221,7 +221,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @param ?callable $selector a transform function to apply to each element
      *
-     * @return int|float
+     * @return float|int
      */
     public function min(callable $selector = null);
 
@@ -232,7 +232,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @see gettype()
      *
-     * @return $this
+     * @return $this|Collection
      */
     public function ofType(string $type): Collection;
 
@@ -243,7 +243,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @see get_class()
      *
-     * @return $this
+     * @return $this|Collection
      */
     public function ofClass(string $className): Collection;
 
@@ -252,7 +252,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @param mixed $element the value to prepend
      *
-     * @return $this
+     * @return $this|Collection
      */
     public function prepend($element): Collection;
 
@@ -279,7 +279,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @param callable $selector a transform function to apply to each element
      *
-     * @return $this
+     * @return $this|Collection
      */
     public function select(callable $selector): Collection;
 
@@ -288,7 +288,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @param ?callable $selector a transform function to apply to each element
      *
-     * @return $this
+     * @return $this|Collection
      */
     public function selectMany(callable $selector = null): Collection;
 
@@ -299,7 +299,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @throws \LazyLINQ\Errors\InvalidOperationException
      *
-     * @return mixed|null
+     * @return null|mixed
      */
     public function single(callable $predicate = null);
 
@@ -308,7 +308,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @param int $count the number of elements to skip before returning with the remaining elements
      *
-     * @return $this
+     * @return $this|Collection
      */
     public function skip(int $count): Collection;
 
@@ -317,7 +317,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @param callable $predicate a function to test each element for a condition
      *
-     * @return $this
+     * @return $this|Collection
      */
     public function skipWhile(callable $predicate): Collection;
 
@@ -326,7 +326,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @param ?callable $selector a transform function to apply to each element
      *
-     * @return int|float|null
+     * @return null|float|int
      */
     public function sum(callable $selector = null);
 
@@ -335,7 +335,7 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @param int $count the number of elements to return
      *
-     * @return $this
+     * @return $this|Collection
      */
     public function take(int $count): Collection;
 
@@ -344,14 +344,12 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @param callable $predicate
      *
-     * @return $this
+     * @return $this|Collection
      */
     public function takeWhile(callable $predicate): Collection;
 
     /**
      * Creates an array with all values from a pipeline.
-     *
-     * @return array
      */
     public function toArray(): array;
 
@@ -360,18 +358,17 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @param callable $predicate a function to test each element for a condition
      *
-     * @return $this
+     * @return $this|Collection
      */
     public function where(callable $predicate): Collection;
 
     /**
      * Applies a specified function to the corresponding elements of two sequences, producing a sequence of the results.
      *
-     * @param \Traversable|array $collection     a sequence to merge
-     * @param ?callable          $resultSelector a function that specifies how to merge the elements from the two sequences
-     * @param mixed              $collection
+     * @param array|iterable|\Traversable $collection     a sequence to merge
+     * @param ?callable                   $resultSelector a function that specifies how to merge the elements from the two sequences
      *
-     * @return $this
+     * @return $this|Collection
      */
     public function zip(/* iterable */$collection, callable $resultSelector = null): Collection;
 

@@ -1,7 +1,7 @@
 .PHONY: ci test prerequisites
 
 # Use any most recent PHP version
-PHP=$(shell which php7.2 || which php7.1 || which php)
+PHP=$(shell which php)
 
 # Default parallelism
 JOBS=$(shell nproc)
@@ -15,7 +15,7 @@ PHP_CS_FIXER_ARGS=--cache-file=build/cache/.php_cs.cache --verbose
 
 # PHPUnit
 PHPUNIT=vendor/bin/phpunit
-PHPUNIT_ARGS=--coverage-xml=coverage/coverage-xml --log-junit=coverage/phpunit.junit.xml
+PHPUNIT_ARGS=--coverage-xml=coverage/coverage-xml --log-junit=coverage/phpunit.junit.xml --coverage-clover=build/logs/clover.xml
 
 # Phan
 PHAN=vendor/bin/phan

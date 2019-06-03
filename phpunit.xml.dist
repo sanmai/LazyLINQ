@@ -1,4 +1,6 @@
 <phpunit bootstrap="vendor/autoload.php"
+         executionOrder="random"
+         resolveDependencies="true"
          colors="true">
 
     <testsuites>
@@ -16,9 +18,4 @@
     <php>
         <ini name="assert.exception" value="1"/>
     </php>
-
-    <logging>
-        <log type="coverage-clover" target="build/logs/clover.xml"/>
-        <log type="coverage-text" target="php://stdout"/>
-    </logging>
 </phpunit>
