@@ -44,4 +44,3 @@ script:
 
 after_success:
   - travis_retry php vendor/bin/php-coveralls
-  - travis_retry php vendor/bin/codacycoverage clover build/logs/clover.xml
