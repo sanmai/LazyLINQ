@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": "^7.0",
-        "sanmai/pipeline": "^2.0 || ^3.0"
+        "sanmai/pipeline": ">=2.0"
     },
     "require-dev": {
         "codacy/coverage": "^1.4",
