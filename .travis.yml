@@ -33,8 +33,6 @@ cache:
     - build/cache
 
 install:
-  - phpenv config-rm xdebug.ini || true
-  - pecl install pcov
   - composer remove --no-update --dev
       phan/phan phpstan/phpstan vimeo/psalm
       infection/infection friendsofphp/php-cs-fixer
