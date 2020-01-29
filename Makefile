@@ -16,6 +16,7 @@ PHP_CS_FIXER_ARGS=--cache-file=build/cache/.php_cs.cache --verbose
 # PHPUnit
 PHPUNIT=vendor/bin/phpunit
 PHPUNIT_ARGS=--coverage-xml=build/logs/coverage-xml --log-junit=build/logs/junit.xml --coverage-clover=build/logs/clover.xml
+PHPUNIT_GROUP=default
 
 # Phan
 PHAN=vendor/bin/phan
@@ -44,6 +45,13 @@ all: test
 ##############################################################
 # Continuous Integration                                     #
 ##############################################################
+
+ci-test: SILENT=
+ci-test: prerequisites
+	$(SILENT) $(PHPDBG) $(PHPUNIT) $(PHPUNIT_COVERAGE_CLOVER) --group=$(PHPUNIT_GROUP)
+
+ci-analyze: SILENT=
+ci-analyze: ci
 
 ci: SILENT=
 ci: prerequisites ci-phpunit ci-analyze

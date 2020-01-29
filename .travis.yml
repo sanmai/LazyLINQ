@@ -5,10 +5,27 @@ php:
   - 7.2
   - 7.3
   - 7.4
+  - nightly
 
-env:
-  global:
-    - PHAN_DISABLE_XDEBUG_WARN=1
+stages:
+  - analyze
+  - test
+
+jobs:
+  fast_finish: true
+  allow_failures:
+    - php: nightly
+  include:
+    - stage: analyze
+      php: 7.3
+      install:
+        - phpenv config-rm xdebug.ini
+        - pecl install ast
+        - pecl install pcov
+        - composer install --prefer-dist
+      script:
+        - make ci-analyze --keep-going
+        - composer validate
 
 cache:
   directories:
@@ -16,11 +33,16 @@ cache:
     - build/cache
 
 install:
-  - pecl install ast
-  - composer install --prefer-dist
+  - phpenv config-rm xdebug.ini || true
+  - pecl install pcov
+  - composer remove --no-update --dev
+      phan/phan phpstan/phpstan vimeo/psalm
+      infection/infection friendsofphp/php-cs-fixer
+  - if [[ $TRAVIS_PHP_VERSION = nightly ]]; then export COMPOSER_FLAGS="--ignore-platform-reqs"; fi
+  - travis_retry composer install --prefer-dist $COMPOSER_FLAGS
 
 script:
-  - make ci --keep-going
+  - make ci-test --keep-going
 
 after_success:
   - travis_retry php vendor/bin/php-coveralls
