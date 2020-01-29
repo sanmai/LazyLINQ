@@ -50,23 +50,23 @@ ci-test: SILENT=
 ci-test: prerequisites
 	$(SILENT) $(PHPDBG) $(PHPUNIT) $(PHPUNIT_COVERAGE_CLOVER) --group=$(PHPUNIT_GROUP)
 
-ci-analyze: SILENT=
-ci-analyze: ci
-
 ci: SILENT=
 ci: prerequisites ci-phpunit ci-analyze
 	$(SILENT) $(COMPOSER) validate --strict
 
+ci-phpunit: SILENT=
 ci-phpunit: ci-cs
 	$(SILENT) $(PHP) $(PHPUNIT) $(PHPUNIT_ARGS)
 	cp build/logs/junit.xml build/logs/phpunit.junit.xml
 	$(SILENT) $(PHP) $(INFECTION) $(INFECTION_ARGS) --quiet
 
+ci-analyze: SILENT=
 ci-analyze: ci-cs
 	$(SILENT) $(PHP) $(PHAN) $(PHAN_ARGS)
 	$(SILENT) $(PHP) $(PHPSTAN) $(PHPSTAN_ARGS) --no-progress
 	$(SILENT) $(PHP) $(PSALM) $(PSALM_ARGS) --no-cache
 
+ci-cs: SILENT=
 ci-cs: prerequisites
 	$(SILENT) $(PHP) $(PHP_CS_FIXER) $(PHP_CS_FIXER_ARGS) --dry-run --stop-on-violation fix
 
