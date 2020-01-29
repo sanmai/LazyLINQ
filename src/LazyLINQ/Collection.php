@@ -33,8 +33,6 @@ class Collection implements Interfaces\Collection
     /**
      * Contructor with a source of data. Not part of any interface, will be removed in future.
      *
-     * @param null|\Traversable $input
-     *
      * @private
      *
      * @deprecated will be removed (made private)

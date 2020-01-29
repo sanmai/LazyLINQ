@@ -48,8 +48,6 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      * Determines whether all elements of a sequence satisfy a condition. With no predicate checks if all elements in sequence are truthy.
      *
      * @param ?callable $predicate a function to test each element for a condition
-     *
-     * @return bool
      */
     public function all(callable $predicate = null): bool;
 
@@ -57,8 +55,6 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      * Determines whether a sequence contains any elements at all, or any elements that satisfy a condition.
      *
      * @param ?callable $predicate
-     *
-     * @return bool
      */
     public function any(callable $predicate = null): bool;
 
@@ -75,8 +71,6 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      * Computes the average of a sequence of values that are obtained by invoking an optional transform function on each element of the input sequence.
      *
      * @param ?callable $selector a transform function to apply to each element
-     *
-     * @return float
      */
     public function average(callable $selector = null): float;
 
@@ -105,8 +99,6 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      *
      * @param mixed     $value    the value to locate in the sequence
      * @param ?callable $comparer an equality comparer to compare values
-     *
-     * @return bool
      */
     public function contains($value, callable $comparer = null): bool;
 
@@ -114,8 +106,6 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      * Determines whether the selected elements include exactly specified element by using an identity comparer. PHP-specific.
      *
      * @param mixed $value the value to locate in the sequence
-     *
-     * @return bool
      */
     public function containsExactly($value): bool;
 
@@ -123,8 +113,6 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
      * Returns a number that represents how many elements in the specified sequence satisfy an optional condition.
      *
      * @param ?callable $predicate an optional function to test each element for a condition
-     *
-     * @return int
      */
     public function count(callable $predicate = null): int;
 
@@ -140,8 +128,6 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
     /**
      * Returns the element at a specified index in a sequence.
      *
-     * @param int $index
-     *
      * @throws \LazyLINQ\Errors\ArgumentNullException       if source is empty
      * @throws \LazyLINQ\Errors\ArgumentOutOfRangeException if index is less than 0 or greater than or equal to the number of elements
      *
@@ -151,8 +137,6 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
 
     /**
      * Returns the element at a specified index in a sequence, or a default value of null if an index is outside the bounds.
-     *
-     * @param int $index
      *
      * @throws \LazyLINQ\Errors\ArgumentNullException if source is empty
      *
@@ -202,8 +186,6 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
 
     /**
      * @see Collection::select()
-     *
-     * @param callable $func
      */
     public function map(callable $func): Collection;
 
@@ -341,8 +323,6 @@ interface Collection extends \JsonSerializable, \IteratorAggregate
 
     /**
      * Returns elements from a sequence as long as a specified condition is true.
-     *
-     * @param callable $predicate
      *
      * @return $this|Collection
      */
