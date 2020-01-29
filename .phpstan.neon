@@ -1,6 +1,5 @@
 parameters:
-    reportUnmatchedIgnoredErrors: false
     ignoreErrors:
         - '#Call to an undefined method Mockery#'
-        - '#LazyLINQ\\LazyCollection::__construct\(\) does not call parent constructor#'
+        - '#Unsafe usage of new static#'
 
