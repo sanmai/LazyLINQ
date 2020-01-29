@@ -17,6 +17,7 @@ PHP_CS_FIXER_ARGS=--cache-file=build/cache/.php_cs.cache --verbose
 PHPUNIT=vendor/bin/phpunit
 PHPUNIT_ARGS=--coverage-xml=build/logs/coverage-xml --log-junit=build/logs/junit.xml --coverage-clover=build/logs/clover.xml
 PHPUNIT_GROUP=default
+PHPUNIT_COVERAGE_CLOVER=--coverage-clover=build/logs/clover.xml
 
 # Phan
 PHAN=vendor/bin/phan
