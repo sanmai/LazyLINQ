@@ -15,7 +15,7 @@ PHP_CS_FIXER_ARGS=--cache-file=build/cache/.php_cs.cache --verbose
 
 # PHPUnit
 PHPUNIT=vendor/bin/phpunit
-PHPUNIT_ARGS=--coverage-xml=coverage/coverage-xml --log-junit=coverage/phpunit.junit.xml --coverage-clover=build/logs/clover.xml
+PHPUNIT_ARGS=--coverage-xml=build/logs/coverage-xml --log-junit=build/logs/junit.xml --coverage-clover=build/logs/clover.xml
 
 # Phan
 PHAN=vendor/bin/phan
@@ -37,7 +37,7 @@ COMPOSER=composer
 INFECTION=vendor/bin/infection
 MIN_MSI=90
 MIN_COVERED_MSI=100
-INFECTION_ARGS=--min-msi=$(MIN_MSI) --min-covered-msi=$(MIN_COVERED_MSI) --threads=$(JOBS) --coverage=coverage
+INFECTION_ARGS=--min-msi=$(MIN_MSI) --min-covered-msi=$(MIN_COVERED_MSI) --threads=$(JOBS) --coverage=build/logs
 
 all: test
 
@@ -51,6 +51,7 @@ ci: prerequisites ci-phpunit ci-analyze
 
 ci-phpunit: ci-cs
 	$(SILENT) $(PHP) $(PHPUNIT) $(PHPUNIT_ARGS)
+	cp build/logs/junit.xml build/logs/phpunit.junit.xml
 	$(SILENT) $(PHP) $(INFECTION) $(INFECTION_ARGS) --quiet
 
 ci-analyze: ci-cs
@@ -72,7 +73,8 @@ test-prerequisites: prerequisites composer.lock
 
 phpunit: cs
 	$(SILENT) $(PHP) $(PHPUNIT) $(PHPUNIT_ARGS) --verbose
-	$(SILENT) $(PHP) $(INFECTION) $(INFECTION_ARGS) --log-verbosity=2 --show-mutations
+	cp build/logs/junit.xml build/logs/phpunit.junit.xml
+	$(SILENT) $(PHP) $(INFECTION) $(INFECTION_ARGS) --show-mutations
 
 analyze: cs
 	$(SILENT) $(PHP) $(PHAN) $(PHAN_ARGS) --color
