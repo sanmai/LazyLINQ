@@ -485,10 +485,7 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $range = static::range(1, LINQ::LAZY_RANGE_MIN_COUNT);
         $actualUsage = memory_get_usage() - $usage;
 
-        if ($actualUsage > $referenceUsage) {
-            $this->markTestIncomplete("Array found to be using $referenceUsage bytes, where our lazy iterator consumed $actualUsage");
-        }
-
+        $this->assertNotEmpty($array); // Tells optimizer to keep this array in memory
         $this->assertLessThan($referenceUsage, $actualUsage);
 
         $this->assertEquals(array_sum(range(1, LINQ::LAZY_RANGE_MIN_COUNT)), $range->sum());
