@@ -19,8 +19,12 @@ declare(strict_types=1);
 
 namespace LazyLINQ;
 
+use LazyLINQ\Util\FromSource;
+
 final class LazyCollection extends Collection implements Interfaces\Collection
 {
+    use FromSource;
+
     /**
      * @var Collection
      */
@@ -51,14 +55,9 @@ final class LazyCollection extends Collection implements Interfaces\Collection
         return $this->collection;
     }
 
-    /**
-     * @deprecated will be removed (made private) in the next major version
-     *
-     * @param ?\Traversable $input
-     */
-    public function __construct(\Traversable $input = null)
+    private function __construct(\Traversable $input = null)
     {
-        $this->collection = new parent($input);
+        $this->collection = parent::from($input);
 
         $this->queue = [];
 

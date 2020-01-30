@@ -22,41 +22,20 @@ namespace LazyLINQ;
 use LazyLINQ\Errors\ArgumentNullException;
 use LazyLINQ\Errors\ArgumentOutOfRangeException;
 use LazyLINQ\Errors\InvalidOperationException;
+use LazyLINQ\Util\FromSource;
 
 class Collection implements Interfaces\Collection
 {
+    use FromSource;
+
     /**
      * @var \Pipeline\Standard
      */
     private $pipeline;
 
-    /**
-     * Contructor with a source of data. Not part of any interface, will be removed in future.
-     *
-     * @private
-     *
-     * @deprecated will be removed (made private)
-     */
-    public function __construct(\Traversable $input = null)
+    private function __construct(\Traversable $input = null)
     {
         $this->pipeline = new \Pipeline\Standard($input);
-    }
-
-    public static function from($source, ...$args): Interfaces\Collection
-    {
-        if (is_array($source)) {
-            return new static(new \ArrayIterator($source));
-        }
-
-        if ($source instanceof \Traversable) {
-            return new static($source);
-        }
-
-        if ($source instanceof \Closure) {
-            return static::from($source(...$args));
-        }
-
-        return new static(new \ArrayIterator([$source]));
     }
 
     private function replace(callable $func): Interfaces\Collection
@@ -494,7 +473,7 @@ class Collection implements Interfaces\Collection
          */
 
         if ($count < static::LAZY_RANGE_MIN_COUNT) {
-            return new static(new \ArrayIterator(range($start, $start + $count - 1)));
+            return static::from(new \ArrayIterator(range($start, $start + $count - 1)));
         }
 
         return static::from(static function () use ($start, $count) {

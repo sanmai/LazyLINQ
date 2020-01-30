@@ -34,7 +34,7 @@ class UnchainedLazyTest extends TestCase
      */
     public static function newInstance(...$args)
     {
-        return new ProxyUnchain(new LINQ(...$args));
+        return new ProxyUnchain(LINQ::from(...$args));
     }
 
     /**

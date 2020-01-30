@@ -32,13 +32,6 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
      *
      * @return \LazyLINQ\Collection
      */
-    abstract public static function newInstance(...$args);
-
-    /**
-     * @param mixed ...$args
-     *
-     * @return \LazyLINQ\Collection
-     */
     abstract public static function from(...$args);
 
     /**
@@ -122,10 +115,6 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
             return is_int($value);
         }));
         $this->assertTrue(static::from(['foo', 1, 'bar'])->any('is_int'));
-
-        $this->assertTrue(static::newInstance()->map(function () {
-            return 0;
-        })->any());
     }
 
     /**
@@ -521,6 +510,16 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
     }
 
     /**
+     * @covers \LazyLINQ\Collection::map
+     */
+    public function testMap()
+    {
+        $this->assertSame([2, 3, 4], static::range(1, 3)->map(function ($value) {
+            return $value + 1;
+        })->toArray());
+    }
+
+    /**
      * @covers \LazyLINQ\Collection::select
      */
     public function testSelect()
@@ -724,21 +723,14 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
     public function testLaziness()
     {
         $spy = \Mockery::spy(\ArrayIterator::class);
+        $spy->shouldNotReceive('rewind');
 
-        $c = static::newInstance($spy);
+        $c = static::from($spy);
         $c->map(function ($value) {
             yield $value;
         })->map(function ($value) {
             yield $value;
         })->filter();
-
-        static::from($spy)->map(function ($value) {
-            yield $value;
-        })->map(function ($value) {
-            yield $value;
-        })->filter();
-
-        $spy->shouldNotReceive('rewind');
     }
 
     private function failingGenerator()

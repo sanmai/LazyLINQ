@@ -31,16 +31,6 @@ class LazyCollectionTest extends TestCase
      *
      * @return \LazyLINQ\LazyCollection
      */
-    public static function newInstance(...$args)
-    {
-        return new LINQ(...$args);
-    }
-
-    /**
-     * @param mixed ...$args
-     *
-     * @return \LazyLINQ\LazyCollection
-     */
     public static function from(...$args)
     {
         return LINQ::from(...$args);
@@ -78,7 +68,7 @@ class LazyCollectionTest extends TestCase
 
     public function testAllMethodsDefined()
     {
-        $reflection = new \ReflectionClass(static::newInstance());
+        $reflection = new \ReflectionClass(static::from([]));
         foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
             if ($method->isStatic()) {
                 continue;

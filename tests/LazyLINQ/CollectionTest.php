@@ -31,16 +31,6 @@ class CollectionTest extends TestCase
      *
      * @return \LazyLINQ\Collection
      */
-    public static function newInstance(...$args)
-    {
-        return new LINQ(...$args);
-    }
-
-    /**
-     * @param mixed ...$args
-     *
-     * @return \LazyLINQ\Collection
-     */
     public static function from(...$args)
     {
         return LINQ::from(...$args);
