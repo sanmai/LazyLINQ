@@ -22,6 +22,13 @@ namespace LazyLINQ\Util;
 use LazyLINQ\Interfaces;
 
 /**
+ * Determines from which number of sequential integers a lazy generator should be used.
+ *
+ * @var int
+ */
+const LAZY_RANGE_MIN_COUNT = 101;
+
+/**
  * @phan-file-suppress PhanTypeMismatchReturn
  * @phan-file-suppress PhanUndeclaredMethod
  */
@@ -53,7 +60,7 @@ trait FromSource
          * On 10000 ints: 528624 with range(), 5232 with a generator.
          */
 
-        if ($count < \LazyLINQ\Collection::LAZY_RANGE_MIN_COUNT) {
+        if ($count < \LazyLINQ\Util\LAZY_RANGE_MIN_COUNT) {
             return self::from(new \ArrayIterator(range($start, $start + $count - 1)));
         }
 

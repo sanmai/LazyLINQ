@@ -29,13 +29,6 @@ final class Collection implements Interfaces\Collection
     use FromSource;
 
     /**
-     * Determines from which number of sequential integers a lazy generator should be used.
-     *
-     * @var int
-     */
-    const LAZY_RANGE_MIN_COUNT = 101;
-
-    /**
      * @var \Pipeline\Standard
      */
     private $pipeline;
