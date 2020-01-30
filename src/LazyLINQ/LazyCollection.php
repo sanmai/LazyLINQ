@@ -26,7 +26,7 @@ final class LazyCollection extends Collection implements Interfaces\Collection
     use FromSource;
 
     /**
-     * @var Collection
+     * @var Collection|Interfaces\Collection
      */
     private $collection;
 
@@ -35,7 +35,10 @@ final class LazyCollection extends Collection implements Interfaces\Collection
      */
     private $queue;
 
-    private function defer($method, ...$args)
+    /**
+     * @param mixed ...$args
+     */
+    private function defer(string $method, ...$args)
     {
         $this->queue[] = [$method, $args];
 

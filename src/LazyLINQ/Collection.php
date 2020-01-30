@@ -311,6 +311,9 @@ class Collection implements Interfaces\Collection
         })->distinct(null, $strict);
     }
 
+    /**
+     * @param array|\Traversable $collection
+     */
     private function exceptEquals($collection): Interfaces\Collection
     {
         return $this->replace(static function ($previous) use ($collection) {
@@ -326,6 +329,9 @@ class Collection implements Interfaces\Collection
         })->distinct();
     }
 
+    /**
+     * @param array|\Traversable $collection
+     */
     private function exceptIdentical($collection): Interfaces\Collection
     {
         return $this->replace(static function ($previous) use ($collection) {
