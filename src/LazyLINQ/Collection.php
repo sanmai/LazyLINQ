@@ -33,8 +33,6 @@ class Collection implements Interfaces\Collection
     /**
      * Contructor with a source of data. Not part of any interface, will be removed in future.
      *
-     * @param null|\Traversable $input
-     *
      * @private
      *
      * @deprecated will be removed (made private)
@@ -435,7 +433,7 @@ class Collection implements Interfaces\Collection
             $this->pipeline->map($selector);
         }
 
-        $min = null;
+        $min = PHP_INT_MIN;
 
         // We can load all values and be done with min(...$this),
         // but all values could take more memory than we have

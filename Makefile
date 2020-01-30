@@ -15,7 +15,9 @@ PHP_CS_FIXER_ARGS=--cache-file=build/cache/.php_cs.cache --verbose
 
 # PHPUnit
 PHPUNIT=vendor/bin/phpunit
-PHPUNIT_ARGS=--coverage-xml=coverage/coverage-xml --log-junit=coverage/phpunit.junit.xml --coverage-clover=build/logs/clover.xml
+PHPUNIT_ARGS=--coverage-xml=build/logs/coverage-xml --log-junit=build/logs/junit.xml --coverage-clover=build/logs/clover.xml
+PHPUNIT_GROUP=default
+PHPUNIT_COVERAGE_CLOVER=--coverage-clover=build/logs/clover.xml
 
 # Phan
 PHAN=vendor/bin/phan
@@ -37,7 +39,7 @@ COMPOSER=composer
 INFECTION=vendor/bin/infection
 MIN_MSI=90
 MIN_COVERED_MSI=100
-INFECTION_ARGS=--min-msi=$(MIN_MSI) --min-covered-msi=$(MIN_COVERED_MSI) --threads=$(JOBS) --coverage=coverage
+INFECTION_ARGS=--min-msi=$(MIN_MSI) --min-covered-msi=$(MIN_COVERED_MSI) --threads=$(JOBS) --coverage=build/logs
 
 all: test
 
@@ -45,19 +47,27 @@ all: test
 # Continuous Integration                                     #
 ##############################################################
 
+ci-test: SILENT=
+ci-test: prerequisites
+	$(SILENT) $(PHPDBG) $(PHPUNIT) $(PHPUNIT_COVERAGE_CLOVER) --group=$(PHPUNIT_GROUP)
+
 ci: SILENT=
 ci: prerequisites ci-phpunit ci-analyze
 	$(SILENT) $(COMPOSER) validate --strict
 
+ci-phpunit: SILENT=
 ci-phpunit: ci-cs
 	$(SILENT) $(PHP) $(PHPUNIT) $(PHPUNIT_ARGS)
+	cp build/logs/junit.xml build/logs/phpunit.junit.xml
 	$(SILENT) $(PHP) $(INFECTION) $(INFECTION_ARGS) --quiet
 
+ci-analyze: SILENT=
 ci-analyze: ci-cs
 	$(SILENT) $(PHP) $(PHAN) $(PHAN_ARGS)
 	$(SILENT) $(PHP) $(PHPSTAN) $(PHPSTAN_ARGS) --no-progress
 	$(SILENT) $(PHP) $(PSALM) $(PSALM_ARGS) --no-cache
 
+ci-cs: SILENT=
 ci-cs: prerequisites
 	$(SILENT) $(PHP) $(PHP_CS_FIXER) $(PHP_CS_FIXER_ARGS) --dry-run --stop-on-violation fix
 
@@ -72,7 +82,8 @@ test-prerequisites: prerequisites composer.lock
 
 phpunit: cs
 	$(SILENT) $(PHP) $(PHPUNIT) $(PHPUNIT_ARGS) --verbose
-	$(SILENT) $(PHP) $(INFECTION) $(INFECTION_ARGS) --log-verbosity=2 --show-mutations
+	cp build/logs/junit.xml build/logs/phpunit.junit.xml
+	$(SILENT) $(PHP) $(INFECTION) $(INFECTION_ARGS) --show-mutations
 
 analyze: cs
 	$(SILENT) $(PHP) $(PHAN) $(PHAN_ARGS) --color
