@@ -21,7 +21,7 @@ namespace LazyLINQ;
 
 use LazyLINQ\Util\FromSource;
 
-final class LazyCollection extends Collection implements Interfaces\Collection
+final class LazyCollection implements Interfaces\Collection
 {
     use FromSource;
 
@@ -60,14 +60,9 @@ final class LazyCollection extends Collection implements Interfaces\Collection
 
     private function __construct(\Traversable $input = null)
     {
-        $this->collection = parent::from($input);
+        $this->collection = Collection::from($input);
 
         $this->queue = [];
-
-        /*
-         * We do not call parent::__construct() here as we do not need anything from the parent.
-         * (Our relationship is a historic curiosity, no more. Will go away later.)
-         */
     }
 
     public function average(callable $selector = null): float
