@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Copyright 2018 Alexey Kopytko <alexey@kopytko.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,16 +26,6 @@ use LazyLINQ\LazyCollection as LINQ;
  */
 class LazyCollectionTest extends TestCase
 {
-    /**
-     * @param mixed ...$args
-     *
-     * @return \LazyLINQ\LazyCollection
-     */
-    public static function newInstance(...$args)
-    {
-        return new LINQ(...$args);
-    }
-
     /**
      * @param mixed ...$args
      *
@@ -78,7 +68,7 @@ class LazyCollectionTest extends TestCase
 
     public function testAllMethodsDefined()
     {
-        $reflection = new \ReflectionClass(static::newInstance());
+        $reflection = new \ReflectionClass(static::from([]));
         foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
             if ($method->isStatic()) {
                 continue;

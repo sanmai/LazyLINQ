@@ -17,8 +17,28 @@
 
 declare(strict_types=1);
 
-namespace LazyLINQ\Errors;
+namespace LazyLINQ\Util;
 
-class ArgumentNullException extends Exception
+/**
+ * @phan-file-suppress PhanTypeMismatchReturn
+ * @phan-file-suppress PhanUndeclaredMethod
+ */
+trait FromSource
 {
+    public static function from($source, ...$args): \LazyLINQ\Interfaces\Collection
+    {
+        if (is_array($source)) {
+            return new self(new \ArrayIterator($source));
+        }
+
+        if ($source instanceof \Traversable) {
+            return new self($source);
+        }
+
+        if ($source instanceof \Closure) {
+            return self::from($source(...$args));
+        }
+
+        return new self(new \ArrayIterator([$source]));
+    }
 }

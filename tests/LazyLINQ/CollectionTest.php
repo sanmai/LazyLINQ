@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Copyright 2018 Alexey Kopytko <alexey@kopytko.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,16 +26,6 @@ use LazyLINQ\Collection as LINQ;
  */
 class CollectionTest extends TestCase
 {
-    /**
-     * @param mixed ...$args
-     *
-     * @return \LazyLINQ\Collection
-     */
-    public static function newInstance(...$args)
-    {
-        return new LINQ(...$args);
-    }
-
     /**
      * @param mixed ...$args
      *

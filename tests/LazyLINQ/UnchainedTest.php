@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Copyright 2018 Alexey Kopytko <alexey@kopytko.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,7 +34,7 @@ class UnchainedTest extends TestCase
      */
     public static function newInstance(...$args)
     {
-        return new ProxyUnchain(new LINQ(...$args));
+        return new ProxyUnchain(LINQ::from(...$args));
     }
 
     /**

@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Copyright 2018 Alexey Kopytko <alexey@kopytko.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,10 +19,14 @@ declare(strict_types=1);
 
 namespace LazyLINQ;
 
+use LazyLINQ\Util\FromSource;
+
 final class LazyCollection extends Collection implements Interfaces\Collection
 {
+    use FromSource;
+
     /**
-     * @var Collection
+     * @var Collection|Interfaces\Collection
      */
     private $collection;
 
@@ -31,7 +35,10 @@ final class LazyCollection extends Collection implements Interfaces\Collection
      */
     private $queue;
 
-    private function defer($method, ...$args)
+    /**
+     * @param mixed ...$args
+     */
+    private function defer(string $method, ...$args)
     {
         $this->queue[] = [$method, $args];
 
@@ -51,14 +58,9 @@ final class LazyCollection extends Collection implements Interfaces\Collection
         return $this->collection;
     }
 
-    /**
-     * @deprecated will be removed (made private) in the next major version
-     *
-     * @param ?\Traversable $input
-     */
-    public function __construct(\Traversable $input = null)
+    private function __construct(\Traversable $input = null)
     {
-        $this->collection = new parent($input);
+        $this->collection = parent::from($input);
 
         $this->queue = [];
 

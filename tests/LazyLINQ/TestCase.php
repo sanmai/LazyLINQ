@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Copyright 2018 Alexey Kopytko <alexey@kopytko.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,13 +27,6 @@ use LazyLINQ\Errors\InvalidOperationException;
  */
 abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
-    /**
-     * @param mixed ...$args
-     *
-     * @return \LazyLINQ\Collection
-     */
-    abstract public static function newInstance(...$args);
-
     /**
      * @param mixed ...$args
      *
@@ -122,10 +115,6 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
             return is_int($value);
         }));
         $this->assertTrue(static::from(['foo', 1, 'bar'])->any('is_int'));
-
-        $this->assertTrue(static::newInstance()->map(function () {
-            return 0;
-        })->any());
     }
 
     /**
@@ -496,10 +485,7 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $range = static::range(1, LINQ::LAZY_RANGE_MIN_COUNT);
         $actualUsage = memory_get_usage() - $usage;
 
-        if ($actualUsage > $referenceUsage) {
-            $this->markTestIncomplete("Array found to be using $referenceUsage bytes, where our lazy iterator consumed $actualUsage");
-        }
-
+        $this->assertNotEmpty($array); // Tells optimizer to keep this array in memory
         $this->assertLessThan($referenceUsage, $actualUsage);
 
         $this->assertEquals(array_sum(range(1, LINQ::LAZY_RANGE_MIN_COUNT)), $range->sum());
@@ -518,6 +504,16 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
         }
 
         $this->assertEquals([true, true, true, true], static::repeat(true, 4)->toArray());
+    }
+
+    /**
+     * @covers \LazyLINQ\Collection::map
+     */
+    public function testMap()
+    {
+        $this->assertSame([2, 3, 4], static::range(1, 3)->map(function ($value) {
+            return $value + 1;
+        })->toArray());
     }
 
     /**
@@ -724,21 +720,14 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
     public function testLaziness()
     {
         $spy = \Mockery::spy(\ArrayIterator::class);
+        $spy->shouldNotReceive('rewind');
 
-        $c = static::newInstance($spy);
+        $c = static::from($spy);
         $c->map(function ($value) {
             yield $value;
         })->map(function ($value) {
             yield $value;
         })->filter();
-
-        static::from($spy)->map(function ($value) {
-            yield $value;
-        })->map(function ($value) {
-            yield $value;
-        })->filter();
-
-        $spy->shouldNotReceive('rewind');
     }
 
     private function failingGenerator()
