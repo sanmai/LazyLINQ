@@ -24,7 +24,7 @@ use LazyLINQ\Errors\ArgumentOutOfRangeException;
 use LazyLINQ\Errors\InvalidOperationException;
 use LazyLINQ\Util\FromSource;
 
-class Collection implements Interfaces\Collection
+final class Collection implements Interfaces\Collection
 {
     use FromSource;
 
@@ -272,11 +272,6 @@ class Collection implements Interfaces\Collection
         return null;
     }
 
-    public static function empty(): Interfaces\Collection
-    {
-        return static::from([]);
-    }
-
     public function except($collection, callable $comparer = null, bool $strict = false): Interfaces\Collection
     {
         if (!$comparer && is_array($collection)) {
@@ -459,43 +454,6 @@ class Collection implements Interfaces\Collection
         return $this->replace(static function ($previous) use ($element) {
             yield $element;
             yield from $previous;
-        });
-    }
-
-    /**
-     * Determines from which number of sequential integers a lazy generator should be used.
-     *
-     * @var int
-     */
-    const LAZY_RANGE_MIN_COUNT = 101;
-
-    public static function range(int $start, int $count): Interfaces\Collection
-    {
-        /*
-         * Typical memory usage is the following:
-         *
-         * On 100 ints: 8432 with range(), 5232 with a generator.
-         * On 10000 ints: 528624 with range(), 5232 with a generator.
-         */
-
-        if ($count < static::LAZY_RANGE_MIN_COUNT) {
-            return static::from(new \ArrayIterator(range($start, $start + $count - 1)));
-        }
-
-        return static::from(static function () use ($start, $count) {
-            do {
-                yield $start;
-                $start += 1;
-            } while ($count -= 1);
-        });
-    }
-
-    public static function repeat($element, int $count): Interfaces\Collection
-    {
-        return static::from(static function () use ($element, $count) {
-            do {
-                yield $element;
-            } while ($count -= 1);
         });
     }
 

@@ -19,8 +19,8 @@ declare(strict_types=1);
 
 namespace LazyLINQ;
 
-use LazyLINQ\Collection as LINQ;
 use LazyLINQ\Errors\InvalidOperationException;
+use const LazyLINQ\Util\LAZY_RANGE_MIN_COUNT;
 
 /**
  * @covers \LazyLINQ\Collection
@@ -458,7 +458,7 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $this->assertEquals([-1, 0, 1, 2], static::range(-1, 4)->toArray());
 
         $count = 0;
-        foreach (static::range(1, LINQ::LAZY_RANGE_MIN_COUNT) as $value) {
+        foreach (static::range(1, LAZY_RANGE_MIN_COUNT) as $value) {
             $this->assertGreaterThan(0, $value);
             $count += 1;
             $this->assertLessThanOrEqual(1000, $count);
@@ -478,17 +478,17 @@ abstract class TestCase extends \Mockery\Adapter\Phpunit\MockeryTestCase
          */
 
         $startUsage = memory_get_usage();
-        $array = range(1, LINQ::LAZY_RANGE_MIN_COUNT - 1);
+        $array = range(1, LAZY_RANGE_MIN_COUNT - 1);
         $referenceUsage = memory_get_usage() - $startUsage;
 
         $usage = memory_get_usage();
-        $range = static::range(1, LINQ::LAZY_RANGE_MIN_COUNT);
+        $range = static::range(1, LAZY_RANGE_MIN_COUNT);
         $actualUsage = memory_get_usage() - $usage;
 
         $this->assertNotEmpty($array); // Tells optimizer to keep this array in memory
         $this->assertLessThan($referenceUsage, $actualUsage);
 
-        $this->assertEquals(array_sum(range(1, LINQ::LAZY_RANGE_MIN_COUNT)), $range->sum());
+        $this->assertEquals(array_sum(range(1, LAZY_RANGE_MIN_COUNT)), $range->sum());
     }
 
     /**
